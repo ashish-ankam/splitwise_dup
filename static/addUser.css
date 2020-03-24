@@ -1,0 +1,64 @@
+body {
+    text-align: center;
+    background-color: dimgrey;
+}
+
+h1 {
+    color: white;
+}
+
+#new_task {
+    border-radius: 10px;
+    width: 500px;
+    height: 30px;
+    color: black;
+}
+
+ul li {
+    border-radius: 3px;
+    list-style-type: none;
+    margin-left: 400px;
+    background-color: white;
+    text-align: left;
+    width: 500px;
+    height: 35px;
+    font-size: 18px;
+    color: darkblue;
+    border-style: solid;
+    border-color: black;
+}
+
+#add {
+    border-radius: 10px;
+    background-color: dodgerblue;
+    color: lightskyblue;
+    width: 100px;
+    height: 35px;
+	float:right
+}
+
+.add {
+    font-weight: 900;
+    padding: 1px 10px 4px 10px;
+    float: right;
+    color: black;
+    height: 30px;
+    vertical-align: bottom;
+    font-weight: bold;
+}
+
+.user_name:hover {
+    background-color: #f44336;
+    color: white;
+}
+.add:hover {
+    background-color: #f44336;
+    color: white;
+}
+
+
+#add:hover{
+    background-color: black;
+    color: blue;
+    cursor: pointer;
+}

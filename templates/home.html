@@ -1,0 +1,58 @@
+{% load static %}
+{% static "media/pics" as baseUrl %}
+<html>
+    <head>
+        <title>Splitwise</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'home.css' %}"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script>
+            function loadChat(){
+                window.location.href="/chat";   
+            }
+            function add_user(){
+                window.location.href="/addUser"; 
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container-fluid">
+                <div class="row">
+                        <div class="col-3">
+            
+                            <div class="row wa-navbar">
+                                <div class="col-8">
+                                    <img src="" class="rounded-circle"/>
+                                </div>
+                                <div class="col-2">
+                                    <i class="large material-icons wa-icon" onclick="add_user()">add</i>
+                                </div>
+                                
+                            </div>
+            
+            
+                            <div class="row">
+                                <div class="col-12 wa-contatos">    
+                                    <input type="text" placeholder="&#xF002; Search" style="font-family:Arial, FontAwesome"/>
+                                </div>
+                            </div>
+                            {% for friend in friends%}
+                            <div class="row wa-item-chat" onClick="loadChat()">
+                                <div class="col-2">
+                                    <img src="" alt="dp" class="rounded-circle"/>
+                                </div>
+                                <div class="col-8">
+                                    <b>{{friend}}</b><br/>
+                                </div>
+                            </div>
+                            <hr/>
+                            {%endfor%}
+                        </div>
+                       
+                    </div>
+            
+        </div>
+    </body>
+
+</html>

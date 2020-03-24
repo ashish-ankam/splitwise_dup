@@ -1,0 +1,102 @@
+{% load static %}
+<html>
+    <head>
+        <title>Splitwise</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'home.css' %}"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    </head>
+    <body>
+            <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-3">
+            
+                            <div class="row wa-navbar">
+                                <div class="col-8">
+                                    <img src="{% static 'profile.jpg' %}" class="rounded-circle"/>
+                                </div>
+                                <div class="col-2">
+                                    <i class="large material-icons wa-icon">chat</i>
+                                </div>
+                               
+                            </div>
+            
+            
+                            <div class="row">
+                                <div class="col-12 wa-contatos">    
+                                    <input type="text" placeholder="&#xF002; Search" style="font-family:Arial, FontAwesome"/>
+                                </div>
+                            </div>
+                            <div class="row wa-item-chat" onClick="abrirChat()">
+                                <div class="col-2">
+                                    <img src="{% static 'profile.jpg' %}" class="rounded-circle"/>
+                                </div>
+                                <div class="col-8">
+                                    <b>Sritej</b><br/>
+                                </div>
+                            </div>
+                            <hr/>
+                        </div>
+                        <hr/>
+                        <div class="col-9">
+            
+                            <div class="wa-navbar">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <img src="{% static 'profile.jpg' %}" class="rounded-circle"/>
+                                        </div>
+                                        <div class="col-9">
+                                            <div style="margin-top: 10px">
+                                                <span style="font-size: 20px">Sritej</span><br/>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>        
+                                </div>
+
+                            </div>
+            
+            
+                            <div class="wa-chat">
+                                <div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <div class="card wa-card-chat wa-card-default">
+                                                Ut eleifend condimentum elit non suscipit. Integer bibendum.
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <br/>
+                                    <div class="row">
+                                        <div class="offset-6 col-5">
+                                            <div class="card wa-card-chat wa-card-green">
+                                                Ut eleifend condimentum elit non suscipit. Integer bibendum.
+                                            </div>
+                                        </div>
+                                    </div>                        
+            
+                                </div>
+            
+                            </div>
+            
+                                <div class="wa-panel-texto">
+                                    <div style="text-align: center">
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <input class="form-control wa-input" placeholder="Type a message"/>
+                                            </div>
+                                            <i class="large material-icons wa-icon">send</i>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+            
+        </div>
+    </body>
+</html>

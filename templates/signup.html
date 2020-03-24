@@ -1,0 +1,95 @@
+!DOCTYPE html>
+<html lang="en">
+  <head>
+  
+    <title>Log in :: Splitwise</title>
+
+    <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="nvw0cZWCp+lgQ5wXgeA8Qy5zQfRWAlDQnLj3DvIaeicrfWexbgwnDzMKDnkeK2tolQFcr/XBStM6OlLCdvK9Rw==" />
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" media="all" href="https://assets.splitwise.com/assets/adorable-471c00f3041dcab7b1f3759141ef696d5851d0d4e56192c2233d4dc0b81c4435.css" />
+    <link href="/favicon.ico" rel="shortcut icon">
+    <link rel="canonical" href="https://www.splitwise.com/login">
+  </head>
+
+  <body id="fat_rabbit">
+      <div class="header">
+        <div class="flex_container">
+          <a href="/"><img id="logo" src="https://assets.splitwise.com/assets/core/logo-wordmark-horizontal-white-short-c309b91b96261a8a993563bdadcf22a89f00ebb260f4f04fd814c2249a6e05d4.svg" /></a>
+
+
+              <div class="login_links">
+                <a class="btn btn-orange" href="/login">Login</a>
+              </div>
+
+              <div id="login-form" class="">
+                <form class="new_user_session" id="new_user_session" novalidate="novalidate" action="/user_session" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="RfsiCobLPlkbCHMTAv1hRXugxusCdO804Du8E5XktJrwenHKfUW+v0hB4X2dNjZuwNLbsKG39TdGuRnfEQxz+g==" />
+
+                  <input placeholder="Email address" autocapitalize="off" type="email" name="user_session[email]" id="user_session_email" />
+                  <br>
+                  <input placeholder="Password" type="password" name="user_session[password]" id="user_session_password" />
+                  <br>
+                  
+                  <input type="submit" name="signup" value="signup" class="btn btn-mint" style="margin-top: 8px" data-disable-with="signup" />
+     </div>
+</form>              </div>
+
+          
+        </div>
+      </div>
+
+    <div class="wrapper">
+      <div class="toppad">&nbsp;</div>
+      
+
+      
+<style>
+  @media (max-width: 750px) {
+    img.login_logo{
+      display: none;
+    }
+  }
+</style>
+
+<div class="flex_container" style="width: auto; max-width: 510px; padding-top: 60px">
+  <img width="200" height="200" style="float: left; margin-right: 25px" class="login_logo" src="https://assets.splitwise.com/assets/core/logo-square-65a6124237868b1d2ce2f5db2ab0b7c777e2348b797626816400534116ae22d7.svg" />
+  <div style="float:left; max-width: 240px; margin-left: 15px; padding-bottom: 60px">
+    <div style="text-transform: uppercase; font-size: 16px; color: #999; font-weight: bold; line-height: 20px">
+      Welcome to Splitwise
+    </div>
+
+    <form class="form-stacked" id="new_user_session" novalidate="novalidate" style="margin: 15px 0 0; width: 260px" action="/signup" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="QRyU0tIyLsflOTuQpybCJvwKEotljBula9qnaSlSPZH0nccSKbyuIbZwqf447ZUNR3gP0MZPAabNWAKlrbr68Q==" />
+     {%csrf_token%}
+        <div class="clearfix">
+            <label style="font-size: 18px" for="user_session_password">Name</label>
+            <div class="input">
+              <input style="font-size: 20px; height: 24px; line-height: 24px; width: 95%; margin-top: 4px; margin-bottom: 15px" type="text" name="name" id="user_session_password" required />
+            </div>
+          </div>
+        <div class="clearfix">
+        <label style="font-size: 18px" for="user_session_email">Email address</label>
+        <div class="input">
+          <input autocapitalize="off" style="font-size: 20px; height: 24px; line-height: 24px; width: 95%; margin-top: 4px; margin-bottom: 15px" type="email" name="email" id="user_session_email" required />
+        </div>
+      </div>
+      <div class="clearfix">
+        <label style="font-size: 18px" for="user_session_password">Password</label>
+        <div class="input">
+          <input style="font-size: 20px; height: 24px; line-height: 24px; width: 95%; margin-top: 4px; margin-bottom: 15px" type="password" name="password" id="user_session_password" required />
+        </div>
+      </div>
+      
+      <div class="clearfix">
+        <label style="font-size: 18px" for="user_session_password">re-enter Password</label>
+        <div class="input">
+          <input style="font-size: 20px; height: 24px; line-height: 24px; width: 95%; margin-top: 4px; margin-bottom: 15px" type="password" name="re_password" id="user_session_password" required />
+        </div>
+      </div>
+   <input type="submit" value="signup" class="btn btn-orange btn-large primary" style="width: 90px; margin-top: 10px; margin-bottom: 10px; font-size: 18px">    
+   {% for msg in messages%}
+   <p>{{msg}}</p>
+   {% endfor%}
+  </form>
+    </div>
+  </body>
+</html>
