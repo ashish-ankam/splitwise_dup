@@ -13,8 +13,15 @@ def getNamesOfFriends(all_users,user_name):
         string_of_user=user[0]
         if string_of_user[0:length] == user_name and string_of_user[length]== '_':
             result.append(string_of_user[length+1:100])
-        elif string_of_user[length+1:100] == user_name and string_of_user[length]== '_':
-            result.append(string_of_user[0:length])
+        else:
+            length=len(string_of_user)
+            i=0
+            while i in range(length):
+                if string_of_user[i] == '_':
+                    break
+                i+=1
+            if string_of_user[i+1:100] == user_name:
+                result.append(string_of_user[0:i])
     return result
 
 def home(request):
@@ -59,7 +66,6 @@ def signup(request):
         else:
             user=User.objects.create_user(username=name,password=password1,email=email)
             user.save()
-            print(request.user)
             return redirect(home)
     return render(request,'signup.html')
 
@@ -81,11 +87,10 @@ def addToDb(request):
     temp_input=friend_name+"_"+str(name)
     cursor.execute("select * from user_to_user_mapping where user_to_user=%s",[temp_input])
     result=cursor.fetchall()
-    print(type(result))
-    if len(result) is 0:
+    if len(result) == 0:
         temp_input=str(name)+"_"+friend_name
         cursor.execute("select * from user_to_user_mapping where user_to_user=%s",[temp_input])
         result=cursor.fetchall()
-        if len(result) is 0:
+        if len(result) == 0:
             cursor.execute("insert into user_to_user_mapping values(%s)",[temp_input])
     return redirect(home)
