@@ -1,0 +1,139 @@
+{% load static %}
+{% static "media/pics" as baseUrl %}
+<html>
+
+<head>
+    <title>Splitwise</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'home.css' %}" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        function loadChat(temp_this) {
+            var a = document.getElementsByName("temp_text");
+            a[0].value = temp_this.querySelector('b').innerHTML;
+            document.forms['form'].action = '/loadChat';
+            document.forms['form'].submit();
+        }
+
+        function add_user() {
+            window.location.href = "/addUser";
+        }
+
+        function sendMsge() {
+            document.forms['form'].action = '/saveMsgToDb';
+            document.forms['form'].submit();
+        }
+
+    </script>
+</head>
+
+<body>
+    <form name="form" method="POST">
+        {% csrf_token %}
+        <input name="temp_text" type="text" hidden>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3">
+                    <div class="row wa-navbar">
+                        <div class="col-8">
+                            <img src="" class="rounded-circle" /><b>{{user.user}}</b>
+                        </div>
+                        <div class="col-2">
+                            <i class="large material-icons wa-icon" onclick="add_user()">add</i>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 wa-contatos">
+                            <input id="search" type="text" placeholder="&#xF002; Search" style="font-family:Arial, FontAwesome" />
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    {% for friend in friends%}
+                    <div class="row wa-item-chat" onclick="loadChat(this)">
+                        <div class="col-2">
+                            <img src="" alt="dp" class="rounded-circle" />
+                        </div>
+                        <div class="col-8">
+                            <b id="hi">{{friend}}</b><br />
+                        </div>
+                    </div>
+                        <hr />
+                        {%endfor%}
+                </div>
+                    
+                <div class="col-9">
+                    <div class="wa-navbar">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-1">
+                                    <img src="{% static 'profile.jpg' %}" class="rounded-circle" />
+                                </div>
+                                <div class="col-9">
+                                    <div style="margin-top: 10px">
+                                        <span style="font-size: 20px">Sritej</span><br />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="wa-chat">
+                        <div>
+                            {%if length is not None %}
+                                {% for i in length|get_range %}
+                            {% if i < friend_msges|get_len %}
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="card wa-card-chat wa-card-default">     
+                                        hiii
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <hr/>
+                            <hr/>
+                            {%endif%}
+                            {% if i < my_msges|get_len %}
+                            <div class="row">
+                                <div class="offset-6 col-5">
+                                    <div class="card wa-card-chat wa-card-green">
+                                        hiii  
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <hr/>
+                            <hr/>
+                            {%endif%}
+                            {%endfor%}
+                            {%endif%}
+                        </div>
+                    </div>
+                    <div class="wa-panel-texto">
+                        <div style="text-align: center">
+                            <div class="row">
+                                <div class="col-10">
+                                    <input name="msg" class="form-control wa-input" placeholder="Type a message" />
+                                </div>
+                                <div class="col-1">
+                                    <i class="large material-icons wa-icon" onclick="sendMsge()">send</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </form>
+</body>
+
+</html>
