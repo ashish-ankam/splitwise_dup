@@ -15,7 +15,7 @@ def get_range(value):
 def get_len(value):
     return len(value)
 
-def getNamesOfFriends(user_name):
+def getNamesOfFriends(user_name): # eturns names of friends of a user
     cursor = connection.cursor()
     cursor.execute("select * from user_to_user_mapping")
     all_users=cursor.fetchall()
@@ -36,9 +36,56 @@ def getNamesOfFriends(user_name):
                 result.append(string_of_user[0:i])
     return result
 
+def getAmount(user,friend=None):
+    cursor=connection.cursor()
+    i_spent=None
+    others_spent=None
+    give=None
+    receive=None
+    #fetching based on provided username and friend name
+    if friend is None:
+        cursor.execute("select SUM(amount) from amount_messages where sender=%s",[user])
+        i_spent=cursor.fetchall()
+        cursor.execute("select SUM(amount) from amount_messages where receiver=%s",[user])
+        others_spent=cursor.fetchall()
+    else:
+        cursor.execute("select SUM(amount) from amount_messages where sender=%s AND receiver=%s",[user,friend])
+        i_spent=cursor.fetchall()
+        cursor.execute("select SUM(amount) from amount_messages where sender=%s AND receiver=%s",[friend,user])
+        others_spent=cursor.fetchall()
+
+    i_spent=i_spent[0][0]
+    others_spent=others_spent[0][0]
+    #calculationg amount to be given or to be received
+    if i_spent is not None and others_spent is not None:
+        if(i_spent<others_spent):
+            give=others_spent-i_spent
+        else:
+            receive=i_spent-others_spent
+    elif i_spent is not None:
+        receive=i_spent
+    elif others_spent is not None:
+        give=others_spent
+
+    return give,receive
+
 def home(request):
     names_of_friends=getNamesOfFriends(str(request.user))
-    return render(request,'home.html',{'user':request,'friends':names_of_friends})
+    cursor = connection.cursor()
+    cursor.execute("select SUM(amount) from amount_messages where sender=%s",[str(request.user)])
+    i_spent=cursor.fetchall()
+    cursor.execute("select SUM(amount) from amount_messages where receiver=%s",[str(request.user)])
+    others_spent=cursor.fetchall()
+    i_spent=i_spent[0][0]
+    others_spent=others_spent[0][0]
+    print(i_spent,others_spent)
+    if(i_spent-others_spent<0):
+        give=others_spent-i_spent
+        receive=None
+    else:
+        give=None
+        receive=i_spent-others_spent
+    return render(request,'home.html',{'user':str(request.user),'friends':names_of_friends,'chat':None,'give':give,'receive':receive})
 
 def login(request):
     if request.method=='POST':
@@ -103,25 +150,22 @@ def addToDb(request):
     return redirect(home)
 
 def saveMsgToDb(request):
-    msg=request.POST['msg']
-    cursor=connection.cursor()
-    cursor.execute("insert into msges values(%s,%s,%s)",[str(request.user),'sritej',msg])
-    return redirect(home)
-
-def loadChat(request):
     friend=request.POST['temp_text']
+    msg=request.POST['msg']
+    amnt=request.POST['amnt']
+    if(amnt==""):
+        amnt=0
     cursor=connection.cursor()
-    cursor.execute("select msge from msges where sender = %s AND receiver= %s",[str(request.user),friend])
-    my_msges=cursor.fetchall()
-    cursor.execute("select msge from msges where sender = %s AND receiver= %s",[friend,str(request.user)])
-    friend_msges=cursor.fetchall()
-    names_of_friends= getNamesOfFriends(str(request.user))
-    my_msges= [my_msges[i][0] for i in range(len(my_msges))] 
-    friend_msges= [friend_msges[i][0] for i in range(len(friend_msges))]
-    print(my_msges)
-    print(friend_msges)
-    if len(my_msges)> len(friend_msges):    
-        length=len(my_msges)
-    else:
-         length=len(friend_msges)
-    return render(request,'home.html',{'user':request,'friends':names_of_friends,'my_msges':my_msges,'friend_msges':friend_msges,'length':length})
+    cursor.execute("insert into amount_messages values(%s,%s,%s,%s)",[str(request.user),friend,amnt,msg])
+    return redirect(loadChat,friend=friend)
+
+def loadChat(request,friend=None):
+    if request.method=='POST':
+        friend=request.POST['temp_text']
+    cursor=connection.cursor()
+    cursor.execute("select * from amount_messages where (sender = %s AND receiver= %s) OR (sender = %s AND receiver= %s)",[str(request.user),friend,friend,str(request.user)])
+    msges_with_names=cursor.fetchall()
+    names_of_friends=getNamesOfFriends(str(request.user))
+    give,receive=getAmount(str(request.user))
+    give_to_friend,receive_from_friend=getAmount(str(request.user),friend)
+    return render(request,'home.html',{'user':str(request.user),'friend':friend,'give':give,'receive':receive,'give_to_friend':give_to_friend,'receive_from_friend':receive_from_friend,'friends':names_of_friends,'chat':1,'messages':msges_with_names})
