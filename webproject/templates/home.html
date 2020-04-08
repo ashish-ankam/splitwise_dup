@@ -153,19 +153,19 @@
                     <div class="wa-chat">
                         <div>
                             {%for msg in messages%}
-                            {%if msg.0 == friend%}
+                            {%if msg.0 == user%}
                             <div class="row">
-                                <div class="col-5">
-                                    <div class="card wa-card-chat wa-card-default">     
-                                        {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}
+                                <div class="offset-6 col-5">
+                                    <div class="card wa-card-chat wa-card-green">
+                                        {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}  
                                     </div>
                                 </div>
                             </div>
                             {% else %}
                             <div class="row">
-                                <div class="offset-6 col-5">
-                                    <div class="card wa-card-chat wa-card-green">
-                                        {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}  
+                                <div class="col-5">
+                                    <div class="card wa-card-chat wa-card-default">     
+                                        {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}
                                     </div>
                                 </div>
                             </div>

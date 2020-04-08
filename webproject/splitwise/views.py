@@ -78,15 +78,16 @@ def getAmount(user,friend=None):
     
     return calculateAmnt(i_spent,others_spent)
 
-def getAmountForGroup(user,group_data):
-    i_spent=0
-    others_spent=0
-    for data in group_data:
-        if data[0] is user:
-            i_spent+=data[2]
-        else:
-            others_spent+=data[2]
-    
+def getAmountForGroup(user,group_name):
+    cursor=connection.cursor()
+    i_spent=None
+    others_spent=None
+    cursor.execute("select SUM(amount) from amount_messages where sender =%s AND receiver=%s",[user,group_name])
+    i_spent = cursor.fetchall()
+    i_spent=i_spent[0][0]
+    cursor.execute("select SUM(amount) from amount_messages where sender != %s AND receiver=%s",[user,group_name])
+    others_spent=cursor.fetchall()
+    others_spent=others_spent[0][0]
     return calculateAmnt(i_spent,others_spent)
 
 def calculateFinalTotalGiveReceives(gives_from_users,receives_from_users,gives_from_groups,receives_from_groups):
@@ -113,14 +114,10 @@ def calculateOverallGiveReceives(request):
     receive_from_groups = None
     groups = getNamesOfGroupsOfUser(str(request.user))
     if groups != []:
-        string_to_execute = "select SUM(amount) from amount_messages where sender = '"+str(request.user)+"' AND ("
+        string_to_execute = "select SUM(amount) from amount_messages where sender != '"+str(request.user)+"' AND ("
         for group in groups:
             string_to_execute+="receiver = '"+group+"' OR "
         string_to_execute=string_to_execute[0:len(string_to_execute)-3]+")"
-        cursor.execute(string_to_execute)
-        i_spent_for_groups = cursor.fetchall()
-        i_spent_for_groups=i_spent_for_groups[0][0]
-        string_to_execute=string_to_execute.replace("=","!=",1)
         cursor.execute(string_to_execute)
         others_spent_for_groups = cursor.fetchall()
         others_spent_for_groups=others_spent_for_groups[0][0]
@@ -128,21 +125,28 @@ def calculateOverallGiveReceives(request):
 
     #for all users calculations
     give,receive = getAmount(str(request.user))
-
     return calculateFinalTotalGiveReceives(give,receive,give_to_groups,receive_from_groups)
     
 def calculateSingleUsersGivesReceives(request,friend):
-    cursor=connection.cursor()
     groups=getAllGroups()
 
     if friend in groups:
-        cursor.execute("select * from amount_messages where receiver=%s",[friend])
-        msges_of_group=cursor.fetchall()
-        give_to_a_chat,receive_from_a_chat = getAmountForGroup(str(request.user),msges_of_group)
+        give_to_a_chat,receive_from_a_chat = getAmountForGroup(str(request.user),friend)
     else:
         give_to_a_chat,receive_from_a_chat = getAmount(str(request.user),friend)
 
     return give_to_a_chat,receive_from_a_chat
+
+def getMessagesWithAUser(user,friend):
+    groups=getAllGroups()
+    cursor=connection.cursor()
+
+    if friend in groups:
+        cursor.execute("select * from amount_messages where receiver=%s",[friend])
+    else :
+        cursor.execute("select * from amount_messages where (sender=%s AND receiver=%s) OR (sender=%s AND receiver=%s)",[user,friend,friend,user])
+
+    return cursor.fetchall()
 
 def loadChat(request,friend=None):
     if request.method=='POST':
@@ -151,9 +155,7 @@ def loadChat(request,friend=None):
     give_to_a_chat, receive_from_a_chat = calculateSingleUsersGivesReceives(request,friend)
     #overall gives and receives
     give,receive=calculateOverallGiveReceives(request)
-    cursor=connection.cursor()
-    cursor.execute("select * from amount_messages where (sender = %s AND receiver= %s) OR (sender = %s AND receiver= %s)",[str(request.user),friend,friend,str(request.user)])
-    msges_with_names = cursor.fetchall()
+    msges_with_names=getMessagesWithAUser(str(request.user),friend)
     names_of_friends = getNamesOfFriends(str(request.user))
     names_of_groups = getNamesOfGroupsOfUser(str(request.user))
     return render(request,'home.html',{'user':str(request.user),'friend':friend,'give':give,'receive':receive,'give_to_friend':give_to_a_chat,'receive_from_friend':receive_from_a_chat,'friends':names_of_friends,'groups':names_of_groups,'chat':1,'messages':msges_with_names})
