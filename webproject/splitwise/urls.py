@@ -7,7 +7,9 @@ urlpatterns = [
     path('signup',views.signup,name="signup"),
     path('home',views.home,name="home"),
     path('loadChat/<str:friend>',views.loadChat,name="loadChat"),
-    path('addUser',views.addUser,name="addUser"),
-    path('addToDb',views.addToDb,name="addToDb"),
+    path('getUsersForUser',views.getUsersForUser,name="getUsersForUser"),
+    path('getUsersForGroup',views.getUsersForGroup,name="getUsersForUroup"),
+    path('addGroupToDb',views.addGroupToDb,name="addGroupToDb"),
+    path('addUserToDb',views.addUserToDb,name="addUserToDb"),
     path('saveMsgToDb',views.saveMsgToDb,name="saveMsgToDb"),
 ]

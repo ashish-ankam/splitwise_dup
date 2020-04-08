@@ -10,29 +10,74 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'addUser.css'%}">
-    <script src="{% static 'addUser.js'%}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("ul[id*=ul] li").click(function() {
-                document.getElementById("new_task").value=$(this).html();
-                document.forms['form'].action = '/addToDb';
+                var name=$(this).html();
+                document.getElementById("myInput").value=name.slice(3,name.length-4);
+                document.forms['form'].action = '/addUserToDb';
                 document.forms['form'].submit();
             });
         });
+        function myFunction() {
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("ul");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
     </script>
+    <style>
+          #myInput {
+            border-radius: 10px;
+            width: 500px;
+            height: 30px;
+            color: black;
+            margin-left: -65px;
+          }
+          
+          #ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+          }
+          
+          #ul li a {
+            border: 1px solid #ddd;
+            margin-top: -1px; /* Prevent double borders */
+            background-color:cornsilk;
+            padding: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black;
+            display: block;
+            height: 30px;
+          }
+          
+          #ul li a:hover:not(.header) {
+            background-color: #eee;
+          }
+    </style>
 </head>
 
 <body>
-    <form method="POST" action="/addUser" name='form'>
-        {% csrf_token %}
-    <h1>enter the name to add</h1>
-    <input type="text" id="new_task" name="user" placeholder="enter user name..">
-    <button type="submit" class="btn btn-info">
-      <span class="glyphicon glyphicon-search"></span> Search
-    </button>
+    <form method="POST" name='form'>
+    {% csrf_token %}
+    <h3>Click on the name to add</h3>
+    <input type="text" id="myInput" name="user" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+    <p></p>
     <ul id="ul">
         {%for user in users%}
-            <li class="user_name" >{{user.username}}</li>
+            <li><a>{{user.username}}</a></li>
         {%endfor%}
     </ul>
 </form>

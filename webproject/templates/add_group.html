@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Add user</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'addUser.css'%}">
+    <script src="{%static 'addUser.js' %}"></script>
+    <style>
+          #myInput {
+            border-radius: 10px;
+            width: 500px;
+            height: 30px;
+            color: black;
+            margin-left: -65px;
+          }
+          
+          #ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+          }
+          
+          #ul li a {
+            border: 1px solid #ddd;
+            margin-top: -1px; /* Prevent double borders */
+            background-color:cornsilk;
+            padding: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black;
+            display: block;
+            height: 30px;
+          }
+          
+          #ul li a:hover:not(.header) {
+            background-color: #eee;
+          }
+    </style>
+</head>
+
+<body>
+    <form method="POST" name='form'>
+    {% csrf_token %}
+    <h3 style="margin-right: 600px;">Type the name to search</h3>
+    <input style="margin-right: 600px;" type="text" id="myInput" name="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+    <p></p>
+    <ul id="ul" style="margin-left: -300px;">
+        {%for user in users%}
+            <li><a>{{user.username}}</a></li>
+        {%endfor%}
+    </ul>
+    <br/>
+    <ul id="addedList" style="margin-left: 300px;margin-top: -130px;" name="grp_mem">       
+    </ul>
+    <input type="submit" value="proceed" style="margin-left: 300px;" onclick="createGroup()">
+    <input type="text" hidden name="group_mem" id="group_mem">
+</form>
+</body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("ul[id*=ul] li").click(function() {
+                var task, list_ele, list, x_butt,name;   
+                list = document.getElementById("addedList");
+                list_ele = document.createElement('li');
+                list_ele.className="addList";
+                /*x_butt = document.createElement('span');
+                x_butt.appendChild(document.createTextNode("\u00D7"));
+                x_butt.className = "close";
+                x_butt.addEventListener("click", remove);*/
+                name = $(this).html();
+                list_ele.appendChild(document.createTextNode(name.slice(3,name.length-4)));
+                list.appendChild(list_ele);
+                //list_ele.appendChild(x_butt);
+                list.appendChild(document.createElement('p'));
+            });
+    });
+    function myFunction() {
+        var input, filter, ul, li, a, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("ul");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+    function createGroup(){
+        var group_name="";
+        while(group_name=="")
+            group_name=prompt("Enter the group name","");
+        document.getElementById("myInput").value= group_name;
+        var grp_mem_list=document.getElementsByClassName("addList");
+        var grp_mem_text=document.getElementById("group_mem");
+        for(var i=0;i<grp_mem_list.length;i++){
+            grp_mem_text.value=grp_mem_text.value+grp_mem_list[i].innerHTML+'_';
+        }
+        document.forms['form'].action = '/addGroupToDb';
+        document.forms['form'].submit();
+    }
+</script>
+</html>
