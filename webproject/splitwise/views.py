@@ -7,6 +7,45 @@ from django.db import connection, models
 # Create your views here.
 
 
+def roundOffTheResult(give, receive):
+    if give is not None:
+        give = round(give, 2)
+    else:
+        receive = round(receive, 2)
+    return give, receive
+
+
+def getUsersInGroupAsList(string_of_names):
+    return string_of_names.split('_')
+
+
+def getNamesOfGroupsOfUser(user_name):  # returns names of groups of a user
+    cursor = connection.cursor()
+    cursor.execute("select * from users_to_group_mapping")
+    data_from_db = cursor.fetchall()
+    result = []
+    for row in data_from_db:
+        list_of_names = getUsersInGroupAsList(row[1])
+        if user_name in list_of_names:
+            result.append(row[0])
+    return result
+
+
+def getNoOfMembersInAGroup(group):
+    cursor = connection.cursor()
+    cursor.execute(
+        "select count_of_users from users_to_group_mapping where group_name=%s", [group])
+    string_of_names = cursor.fetchall()
+    return string_of_names[0][0]
+
+
+def getAllGroups():
+    cursor = connection.cursor()
+    cursor.execute("select group_name from users_to_group_mapping")
+    grp_names = cursor.fetchall()
+    return [result[0] for result in grp_names]
+
+
 def getNamesOfFriends(user_name):  # returns names of friends of a user
     cursor = connection.cursor()
     cursor.execute("select * from user_to_user_mapping")
@@ -23,29 +62,6 @@ def getNamesOfFriends(user_name):  # returns names of friends of a user
     return result
 
 
-def getUsersInGroupAsList(string_of_names):
-    return string_of_names.split('_')
-
-
-def getAllGroups():
-    cursor = connection.cursor()
-    cursor.execute("select group_name from users_to_group_mapping")
-    grp_names = cursor.fetchall()
-    return [result[0] for result in grp_names]
-
-
-def getNamesOfGroupsOfUser(user_name):  # returns names of groups of a user
-    cursor = connection.cursor()
-    cursor.execute("select * from users_to_group_mapping")
-    data_from_db = cursor.fetchall()
-    result = []
-    for row in data_from_db:
-        list_of_names = getUsersInGroupAsList(row[1])
-        if user_name in list_of_names:
-            result.append(row[0])
-    return result
-
-
 def calculateAmnt(i_spent, others_spent):
     # calculationg amount to be given or to be received
     give = None
@@ -59,17 +75,7 @@ def calculateAmnt(i_spent, others_spent):
         receive = i_spent
     elif others_spent is not None:
         give = others_spent
-
     return give, receive
-
-
-def getNoOfMembersInAGroup(group):
-    cursor = connection.cursor()
-    cursor.execute(
-        "select count_of_users from users_to_group_mapping where group_name=%s", [group])
-    string_of_names = cursor.fetchall()
-
-    return string_of_names[0][0]
 
 
 def divideAmount(i_spent, others_spent, group=None):
@@ -84,30 +90,37 @@ def divideAmount(i_spent, others_spent, group=None):
             i_spent = ((no_of_group_members-1)*i_spent)/no_of_group_members
         if others_spent is not None:
             others_spent = others_spent/no_of_group_members
-
     return i_spent, others_spent
 
 
-def getAmount(user, friend=None):
+def getAmountForSingleUser(user, friend):
     cursor = connection.cursor()
     i_spent = None
     others_spent = None
-    # fetching based on provided username and friend name
-    if friend is None:
-        cursor.execute(
-            "select SUM(amount) from amount_messages_user_to_user where sender=%s", [user])
-        i_spent = cursor.fetchall()
-        cursor.execute(
-            "select SUM(amount) from amount_messages_user_to_user where receiver=%s", [user])
-        others_spent = cursor.fetchall()
-    else:
-        cursor.execute(
-            "select SUM(amount) from amount_messages_user_to_user where sender=%s AND receiver=%s", [user, friend])
-        i_spent = cursor.fetchall()
-        cursor.execute(
-            "select SUM(amount) from amount_messages_user_to_user where sender=%s AND receiver=%s", [friend, user])
-        others_spent = cursor.fetchall()
+    cursor.execute(
+        "select SUM(amount) from amount_messages_user_to_user where sender=%s AND receiver=%s", [user, friend])
+    i_spent = cursor.fetchall()
+    cursor.execute(
+        "select SUM(amount) from amount_messages_user_to_user where sender=%s AND receiver=%s", [friend, user])
+    others_spent = cursor.fetchall()
+    i_spent = i_spent[0][0]
+    others_spent = others_spent[0][0]
+    # this divides the amount between users
+    i_spent, others_spent = divideAmount(i_spent, others_spent)
+    # this gives overall thing i.e whether to give or receive money
+    return calculateAmnt(i_spent, others_spent)
 
+
+def getAmountForAllUsers(user):
+    cursor = connection.cursor()
+    i_spent = None
+    others_spent = None
+    cursor.execute(
+        "select SUM(amount) from amount_messages_user_to_user where sender=%s", [user])
+    i_spent = cursor.fetchall()
+    cursor.execute(
+        "select SUM(amount) from amount_messages_user_to_user where receiver=%s", [user])
+    others_spent = cursor.fetchall()
     i_spent = i_spent[0][0]
     others_spent = others_spent[0][0]
     # this divides the amount between users
@@ -132,24 +145,7 @@ def getAmountForGroup(user, group_name):
     return calculateAmnt(i_spent, others_spent)
 
 
-def calculateFinalTotalGiveReceives(gives_from_users, receives_from_users, gives_from_groups, receives_from_groups):
-    if gives_from_users is None and gives_from_groups is None and receives_from_users is None and receives_from_groups is None:
-        return None, None
-    if gives_from_users is None and receives_from_users is None:
-        return gives_from_groups, receives_from_groups
-    if gives_from_groups is None and receives_from_groups is None:
-        return gives_from_users, receives_from_users
-    if gives_from_users is None and gives_from_groups is None:
-        return None, receives_from_users+receives_from_groups
-    if receives_from_users is None and receives_from_groups is None:
-        return gives_from_users+gives_from_groups, None
-    if gives_from_users is None and receives_from_groups is None:
-        return calculateAmnt(receives_from_users, gives_from_groups)
-    return calculateAmnt(gives_from_users, receives_from_groups)
-
-
-def calculateOverallGiveReceives(request):
-    # for all groups calculations
+def getAmountForAllGroups(request):
     i_spent_for_groups = None
     others_spent_for_groups = None
     temp_i_spent_for_groups = 0
@@ -171,73 +167,54 @@ def calculateOverallGiveReceives(request):
             others_spent_for_groups = temp_others_spent_for_groups
         give_to_groups, receive_from_groups = calculateAmnt(
             i_spent_for_groups, others_spent_for_groups)
+    return give_to_groups, receive_from_groups
 
+
+def calculateOverallGiveReceives(request):
+    # for all groups calculations
+    give_to_groups, receive_from_groups = getAmountForAllGroups(request)
     # for all users calculations
-    give, receive = getAmount(str(request.user))
+    give, receive = getAmountForAllUsers(str(request.user))
+    return calculateFinalOverallGiveReceives(give, receive, give_to_groups, receive_from_groups)
 
-    return calculateFinalTotalGiveReceives(give, receive, give_to_groups, receive_from_groups)
+
+def calculateFinalOverallGiveReceives(gives_from_users, receives_from_users, gives_from_groups, receives_from_groups):
+    if gives_from_users is None and gives_from_groups is None and receives_from_users is None and receives_from_groups is None:
+        return None, None
+    if gives_from_users is None and receives_from_users is None:
+        return gives_from_groups, receives_from_groups
+    if gives_from_groups is None and receives_from_groups is None:
+        return gives_from_users, receives_from_users
+    if gives_from_users is None and gives_from_groups is None:
+        return None, receives_from_users+receives_from_groups
+    if receives_from_users is None and receives_from_groups is None:
+        return gives_from_users+gives_from_groups, None
+    if gives_from_users is None and receives_from_groups is None:
+        return calculateAmnt(receives_from_users, gives_from_groups)
+    return calculateAmnt(gives_from_users, receives_from_groups)
 
 
 def calculateSingleUsersGivesReceives(request, friend):
     groups = getAllGroups()
-
     if friend in groups:
         give_to_a_chat, receive_from_a_chat = getAmountForGroup(
             str(request.user), friend)
     else:
-        give_to_a_chat, receive_from_a_chat = getAmount(
+        give_to_a_chat, receive_from_a_chat = getAmountForSingleUser(
             str(request.user), friend)
-
     return give_to_a_chat, receive_from_a_chat
 
 
 def getMessagesWithAUser(user, friend):
     groups = getAllGroups()
     cursor = connection.cursor()
-
     if friend in groups:
         cursor.execute(
             "select * from amount_messages_users_to_group where group_name=%s", [friend])
     else:
         cursor.execute(
             "select * from amount_messages_user_to_user where (sender=%s AND receiver=%s) OR (sender=%s AND receiver=%s)", [user, friend, friend, user])
-
     return cursor.fetchall()
-
-
-def roundOffTheResult(give, receive):
-    if give is not None:
-        give = round(give, 2)
-    else:
-         receive = round(receive, 2)
-    return give, receive
-
-def loadChat(request, friend=None):
-    if request.method == 'POST':
-        friend = request.POST['temp_text']
-
-    # single chats gives,receives
-    give_to_a_chat, receive_from_a_chat = calculateSingleUsersGivesReceives(
-        request, friend)
-    # overall gives and receives
-    give, receive = calculateOverallGiveReceives(request)
-
-    give,receive = roundOffTheResult(give,receive)
-    give_to_a_chat,receive_from_a_chat = roundOffTheResult(give_to_a_chat,receive_from_a_chat)
-
-    msges_with_names = getMessagesWithAUser(str(request.user), friend)
-    names_of_friends = getNamesOfFriends(str(request.user))
-    names_of_groups = getNamesOfGroupsOfUser(str(request.user))
-    
-    return render(request, 'home.html', {'user': str(request.user), 'friend': friend, 'give': give, 'receive': receive, 'give_to_friend': give_to_a_chat, 'receive_from_friend': receive_from_a_chat, 'friends': names_of_friends, 'groups': names_of_groups, 'chat': 1, 'messages': msges_with_names})
-
-
-def home(request):
-    names_of_friends = getNamesOfFriends(str(request.user))
-    names_of_groups = getNamesOfGroupsOfUser(str(request.user))
-    give, receive = calculateOverallGiveReceives(request)
-    give,receive = roundOffTheResult(give,receive)
-    return render(request, 'home.html', {'user': str(request.user), 'friends': names_of_friends, 'groups': names_of_groups, 'chat': None, 'give': give, 'receive': receive})
 
 
 def login(request):
@@ -282,7 +259,32 @@ def signup(request):
     return render(request, 'signup.html')
 
 
-def getUsersForUser(request):
+def home(request):
+    names_of_friends = getNamesOfFriends(str(request.user))
+    names_of_groups = getNamesOfGroupsOfUser(str(request.user))
+    give, receive = calculateOverallGiveReceives(request)
+    give, receive = roundOffTheResult(give, receive)
+    return render(request, 'home.html', {'user': str(request.user), 'friends': names_of_friends, 'groups': names_of_groups, 'chat': None, 'give': give, 'receive': receive})
+
+
+def loadChat(request, friend=None):
+    if request.method == 'POST':
+        friend = request.POST['temp_text']
+    # single chats gives,receives
+    give_to_a_chat, receive_from_a_chat = calculateSingleUsersGivesReceives(
+        request, friend)
+    # overall gives and receives
+    give, receive = calculateOverallGiveReceives(request)
+    give, receive = roundOffTheResult(give, receive)
+    give_to_a_chat, receive_from_a_chat = roundOffTheResult(
+        give_to_a_chat, receive_from_a_chat)
+    msges_with_names = getMessagesWithAUser(str(request.user), friend)
+    names_of_friends = getNamesOfFriends(str(request.user))
+    names_of_groups = getNamesOfGroupsOfUser(str(request.user))
+    return render(request, 'home.html', {'user': str(request.user), 'friend': friend, 'give': give, 'receive': receive, 'give_to_friend': give_to_a_chat, 'receive_from_friend': receive_from_a_chat, 'friends': names_of_friends, 'groups': names_of_groups, 'chat': 1, 'messages': msges_with_names})
+
+
+def getUsersForAddingUser(request):
     users = User.objects.all()
     return render(request, 'add_user.html', {'users': users})
 
@@ -306,7 +308,7 @@ def addUserToDb(request):
     return redirect(home)
 
 
-def getUsersForGroup(request):
+def getUsersForAddingGroup(request):
     users = User.objects.all()
     return render(request, 'add_group.html', {'users': users})
 

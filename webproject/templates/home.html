@@ -17,11 +17,11 @@
         }
 
         function add_user() {
-            window.location.href = "/getUsersForUser";
+            window.location.href = "/getUsersFoAddingUser";
         }
 
         function add_group() {
-            window.location.href = "/getUsersForGroup";
+            window.location.href = "/getUsersForAddingGroup";
         }
 
         function sendMsge() {
@@ -71,7 +71,7 @@
 </head>
 
 <body>
-    <form name="form" method="POST">
+    <form name="form" method="POST" style="overflow-x: hidden;">
         {% csrf_token %}
         <input name="temp_text" type="text" hidden>
         <div class="container-fluid">
@@ -157,7 +157,7 @@
                             <div class="row">
                                 <div class="offset-6 col-5">
                                     <div class="card wa-card-chat wa-card-green">
-                                        {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}  
+                                        <b>Me :</b>  {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}  
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +165,7 @@
                             <div class="row">
                                 <div class="col-5">
                                     <div class="card wa-card-chat wa-card-default">     
-                                        {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}
+                                        <b>From {{msg.0}} :</b>  {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}
                                     </div>
                                 </div>
                             </div>
