@@ -12,4 +12,5 @@ urlpatterns = [
     path('addGroupToDb',views.addGroupToDb,name="addGroupToDb"),
     path('addUserToDb',views.addUserToDb,name="addUserToDb"),
     path('saveMsgToDb',views.saveMsgToDb,name="saveMsgToDb"),
+    path('clearChat/<str:friend>',views.clearChat,name="clearChat"),
 ]

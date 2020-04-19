@@ -10,7 +10,7 @@ from django.db import connection, models
 def roundOffTheResult(give, receive):
     if give is not None:
         give = round(give, 2)
-    else:
+    elif receive is not None:
         receive = round(receive, 2)
     return give, receive
 
@@ -340,3 +340,34 @@ def saveMsgToDb(request):
         cursor.execute("insert into amount_messages_user_to_user values(%s,%s,%s,%s)", [
                        str(request.user), friend, amnt, msg])
     return redirect(loadChat, friend=friend)
+
+
+def removeNameFromString(group_members,user_name):
+    friends = group_members.split('_')
+    friends.remove(user_name)
+    return '_'.join(friends)
+
+
+def clearChat(request,friend):
+    cursor = connection.cursor()
+    dbName1 = friend+'_'+str(request.user)
+    dbName2 = str(request.user)+'_'+friend
+    cursor.execute("delete from user_to_user_mapping where user_to_user=%s or user_to_user=%s",[dbName1,dbName2])
+    cursor.execute("delete from amount_messages_user_to_user where (sender=%s and receiver=%s) or (sender=%s and receiver=%s)",[friend,str(request.user),str(request.user),friend])
+    #fetch group members then remove user name then update the data in DB
+    cursor.execute("select group_members from users_to_group_mapping where group_name=%s",[friend])
+    group_members=cursor.fetchall()
+    if group_members != []:
+        #remove user share from the group
+        cursor.execute("delete from amount_messages_users_to_group where sender=%s and group_name=%s",[str(request.user),friend])
+        cursor.execute("select count_of_users from users_to_group_mapping where group_name = %s",[friend])
+        count = cursor.fetchall()
+        count = count[0][0]
+        if count == 2:
+            cursor.execute("delete from users_to_group_mapping where group_name = %s",[friend])
+            cursor.execute("delete from amount_messages_users_to_group where group_name =%s",[friend])
+        else:
+            cursor.execute("update amount_messages_users_to_group set amount = (amount*(%s-1))/%s",[count,count])
+            group_members = removeNameFromString(group_members[0][0],str(request.user))
+            cursor.execute("update users_to_group_mapping SET group_members = %s, count_of_users=count_of_users-1 where group_name = %s",[group_members,friend])
+    return redirect(home)

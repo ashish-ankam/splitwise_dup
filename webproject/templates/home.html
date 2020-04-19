@@ -17,7 +17,7 @@
         }
 
         function add_user() {
-            window.location.href = "/getUsersFoAddingUser";
+            window.location.href = "/getUsersForAddingUser";
         }
 
         function add_group() {
@@ -34,6 +34,9 @@
                 document.forms['form'].action = '/saveMsgToDb';
                 document.forms['form'].submit();
             }
+        }
+        function clearChat(){
+            window.location.href="/clearChat/"+document.getElementById("friend_name").innerHTML;
         }
     </script>
     <style>
@@ -67,6 +70,11 @@
             margin-top: 100;
             color: green;
         }
+        #clear{
+            width: 150px;
+            margin-left: 330px;
+            background-color: red;
+        }
     </style>
 </head>
 
@@ -97,7 +105,8 @@
                             {% elif receive is not None %}
                                 <b id="green">TOTAL = + {{receive}}</b>
                             {% endif %}
-                            <input id="search" type="text" placeholder="&#xF002; Search" style="font-family:Arial, FontAwesome" />
+                            <br/>
+                            <b>Friends</b>
                         </div>
                     </div>
                     
@@ -112,7 +121,8 @@
                     </div>
                         <hr />
                     {%endfor%}
-                        
+                    <br/>
+                        <b>Groups</b>
                     {% for group in groups%}
                     <div class="row wa-item-chat" onclick="loadChat(this)">
                         <div class="col-2">
@@ -142,6 +152,7 @@
                                         {% elif receive_from_friend is not None %}
                                         <b id="individual_green">AMOUNT =  + {{receive_from_friend}}</b>
                                         {%endif%}
+                                        <input type="button" onclick="clearChat()" value="Clear history" name="clear" id="clear">
                                     </div>
                                 </div>
 
