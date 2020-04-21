@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>
+        CSS Internal styling Demo
+    </title>
+    <style>
+        table {
+            text-align: center;
+            border: 3px solid;
+            background-color: pink;
+            padding: 5px;
+            border-spacing: 10px;
+            border-color: yellow;
+            width: auto;
+            height: auto;
+
+        }
+
+        th,
+        td {
+            width: 90px;
+            height: 40px;
+            border: 1px solid yellow
+        }
+
+        caption {
+            font-size: x-large;
+            font-weight: bold
+        }
+        #red{
+            color: red;
+        }
+        #green{
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <table align=center>
+        <caption>
+            {{group}}
+        </caption>
+        <tr>
+            <th>User Name</th>
+            <th>Amount</th>
+        </tr>
+        {% for give in givings%}
+        <tr>
+            <td>{{give.0}}</td>
+            {%if give.1 < 0 %}
+            <td id = "red"><b>{{give.1}}</b></td>
+            {%else%}
+            <td id = "green"><b>+ {{give.1}}</b></td>
+            {%endif%}
+        </tr>
+        {%endfor%}
+    </table>
+</body>
+
+</html>

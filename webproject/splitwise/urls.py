@@ -13,4 +13,5 @@ urlpatterns = [
     path('addUserToDb',views.addUserToDb,name="addUserToDb"),
     path('saveMsgToDb',views.saveMsgToDb,name="saveMsgToDb"),
     path('clearChat/<str:friend>',views.clearChat,name="clearChat"),
+    path('groupGivings/<str:friend>',views.groupGivings,name="groupGivings"),
 ]

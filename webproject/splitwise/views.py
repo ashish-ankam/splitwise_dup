@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from django.db.models import Q, Model
 from django.db import connection, models
+from .models import user_to_user_mapping, users_to_group_mapping, amount_messages_user_to_user, amount_messages_users_to_group
 # Create your views here.
 
 
@@ -21,7 +22,7 @@ def getUsersInGroupAsList(string_of_names):
 
 def getNamesOfGroupsOfUser(user_name):  # returns names of groups of a user
     cursor = connection.cursor()
-    cursor.execute("select * from users_to_group_mapping")
+    cursor.execute("select group_name,group_members from splitwise_users_to_group_mapping")
     data_from_db = cursor.fetchall()
     result = []
     for row in data_from_db:
@@ -34,21 +35,21 @@ def getNamesOfGroupsOfUser(user_name):  # returns names of groups of a user
 def getNoOfMembersInAGroup(group):
     cursor = connection.cursor()
     cursor.execute(
-        "select count_of_users from users_to_group_mapping where group_name=%s", [group])
+        "select count_of_users from splitwise_users_to_group_mapping where group_name=%s", [group])
     string_of_names = cursor.fetchall()
     return string_of_names[0][0]
 
 
 def getAllGroups():
     cursor = connection.cursor()
-    cursor.execute("select group_name from users_to_group_mapping")
+    cursor.execute("select group_name from splitwise_users_to_group_mapping")
     grp_names = cursor.fetchall()
     return [result[0] for result in grp_names]
 
 
 def getNamesOfFriends(user_name):  # returns names of friends of a user
     cursor = connection.cursor()
-    cursor.execute("select * from user_to_user_mapping")
+    cursor.execute("select user_to_user from splitwise_user_to_user_mapping")
     all_users = cursor.fetchall()
     result = []
     for user in all_users:
@@ -98,10 +99,10 @@ def getAmountForSingleUser(user, friend):
     i_spent = None
     others_spent = None
     cursor.execute(
-        "select SUM(amount) from amount_messages_user_to_user where sender=%s AND receiver=%s", [user, friend])
+        "select SUM(amount) from splitwise_amount_messages_user_to_user where sender=%s AND receiver=%s", [user, friend])
     i_spent = cursor.fetchall()
     cursor.execute(
-        "select SUM(amount) from amount_messages_user_to_user where sender=%s AND receiver=%s", [friend, user])
+        "select SUM(amount) from splitwise_amount_messages_user_to_user where sender=%s AND receiver=%s", [friend, user])
     others_spent = cursor.fetchall()
     i_spent = i_spent[0][0]
     others_spent = others_spent[0][0]
@@ -116,10 +117,10 @@ def getAmountForAllUsers(user):
     i_spent = None
     others_spent = None
     cursor.execute(
-        "select SUM(amount) from amount_messages_user_to_user where sender=%s", [user])
+        "select SUM(amount) from splitwise_amount_messages_user_to_user where sender=%s", [user])
     i_spent = cursor.fetchall()
     cursor.execute(
-        "select SUM(amount) from amount_messages_user_to_user where receiver=%s", [user])
+        "select SUM(amount) from splitwise_amount_messages_user_to_user where receiver=%s", [user])
     others_spent = cursor.fetchall()
     i_spent = i_spent[0][0]
     others_spent = others_spent[0][0]
@@ -133,11 +134,11 @@ def getAmountForGroup(user, group_name):
     cursor = connection.cursor()
     i_spent = None
     others_spent = None
-    cursor.execute("select SUM(amount) from amount_messages_users_to_group where sender =%s AND group_name=%s", [
+    cursor.execute("select SUM(amount) from splitwise_amount_messages_users_to_group where sender =%s AND group_name=%s", [
                    user, group_name])
     i_spent = cursor.fetchall()
     i_spent = i_spent[0][0]
-    cursor.execute("select SUM(amount) from amount_messages_users_to_group where sender != %s AND group_name=%s", [
+    cursor.execute("select SUM(amount) from splitwise_amount_messages_users_to_group where sender != %s AND group_name=%s", [
                    user, group_name])
     others_spent = cursor.fetchall()
     others_spent = others_spent[0][0]
@@ -210,10 +211,10 @@ def getMessagesWithAUser(user, friend):
     cursor = connection.cursor()
     if friend in groups:
         cursor.execute(
-            "select * from amount_messages_users_to_group where group_name=%s", [friend])
+            "select sender,group_name,amount,message from splitwise_amount_messages_users_to_group where group_name=%s", [friend])
     else:
         cursor.execute(
-            "select * from amount_messages_user_to_user where (sender=%s AND receiver=%s) OR (sender=%s AND receiver=%s)", [user, friend, friend, user])
+            "select sender,receiver,amount,message from splitwise_amount_messages_user_to_user where (sender=%s AND receiver=%s) OR (sender=%s AND receiver=%s)", [user, friend, friend, user])
     return cursor.fetchall()
 
 
@@ -275,17 +276,21 @@ def loadChat(request, friend=None):
         request, friend)
     # overall gives and receives
     give, receive = calculateOverallGiveReceives(request)
+
     give, receive = roundOffTheResult(give, receive)
     give_to_a_chat, receive_from_a_chat = roundOffTheResult(
         give_to_a_chat, receive_from_a_chat)
     msges_with_names = getMessagesWithAUser(str(request.user), friend)
     names_of_friends = getNamesOfFriends(str(request.user))
     names_of_groups = getNamesOfGroupsOfUser(str(request.user))
-    return render(request, 'home.html', {'user': str(request.user), 'friend': friend, 'give': give, 'receive': receive, 'give_to_friend': give_to_a_chat, 'receive_from_friend': receive_from_a_chat, 'friends': names_of_friends, 'groups': names_of_groups, 'chat': 1, 'messages': msges_with_names})
+    group = None # this is used at client side to recognize whether a chat is with group or not
+    if friend in names_of_groups:
+        group = 1 # some random values other than None
+    return render(request, 'home.html', {'user': str(request.user), 'friend': friend,'group':group, 'give': give, 'receive': receive, 'give_to_friend': give_to_a_chat, 'receive_from_friend': receive_from_a_chat, 'friends': names_of_friends, 'groups': names_of_groups, 'chat': 1, 'messages': msges_with_names})
 
 
 def getUsersForAddingUser(request):
-    users = User.objects.all()
+    users = User.objects.filter(~Q(username = str(request.user)))
     return render(request, 'add_user.html', {'users': users})
 
 
@@ -293,23 +298,21 @@ def addUserToDb(request):
     friend_name = request.POST['user']
     name = request.user
     cursor = connection.cursor()
-    temp_input = friend_name+"_"+str(name)
+    temp_input1 = friend_name+"_"+str(name)
+    temp_input2 = str(name)+"_"+friend_name
     cursor.execute(
-        "select * from user_to_user_mapping where user_to_user=%s", [temp_input])
+        "select * from splitwise_user_to_user_mapping where user_to_user=%s OR user_to_user = %s", [temp_input1,temp_input2])
     result = cursor.fetchall()
     if len(result) == 0:
-        temp_input = str(name)+"_"+friend_name
-        cursor.execute(
-            "select * from user_to_user_mapping where user_to_user=%s", [temp_input])
-        result = cursor.fetchall()
-        if len(result) == 0:
-            cursor.execute(
-                "insert into user_to_user_mapping values(%s)", [temp_input])
+        obj = user_to_user_mapping(user_to_user = temp_input1)
+        obj.save()
+            #cursor.execute(
+                #"insert into splitwise_user_to_user_mapping values(%s)", [temp_input])
     return redirect(home)
 
 
 def getUsersForAddingGroup(request):
-    users = User.objects.all()
+    users = User.objects.filter(~Q(username = str(request.user)))
     return render(request, 'add_group.html', {'users': users})
 
 
@@ -319,9 +322,11 @@ def addGroupToDb(request):
     group_members = request.POST['group_mem']
     group_members = group_members+user
     no_of_group_members = len(getUsersInGroupAsList(group_members))
-    cursor = connection.cursor()
-    cursor.execute("insert into users_to_group_mapping values(%s,%s,%s)", [
-                   group_name, group_members, no_of_group_members])
+    obj = users_to_group_mapping(group_name= group_name, group_members = group_members, count_of_users = no_of_group_members)
+    obj.save()
+    #cursor = connection.cursor()
+    #cursor.execute("insert into splitwise_users_to_group_mapping values(%s,%s,%s)", [
+    #               group_name, group_members, no_of_group_members])
     return redirect(home)
 
 
@@ -331,43 +336,90 @@ def saveMsgToDb(request):
     amnt = request.POST['amnt']
     if(amnt == ""):
         amnt = 0
-    cursor = connection.cursor()
     groups = getAllGroups()
     if friend in groups:
-        cursor.execute("insert into amount_messages_users_to_group values(%s,%s,%s,%s)", [
-            str(request.user), friend, amnt, msg])
+        obj = amount_messages_users_to_group(sender = str(request.user),group_name = friend, amount = amnt, message = msg)
+        obj.save()
+        #cursor.execute("insert into splitwise_amount_messages_users_to_group values(%s,%s,%s,%s)", [
+        #    str(request.user), friend, amnt, msg])
     else:
-        cursor.execute("insert into amount_messages_user_to_user values(%s,%s,%s,%s)", [
-                       str(request.user), friend, amnt, msg])
+        obj = amount_messages_user_to_user(sender = str(request.user),receiver = friend, amount = amnt, message = msg)
+        obj.save()
+        #cursor.execute("insert into splitwise_amount_messages_user_to_user values(%s,%s,%s,%s)", [
+        #               str(request.user), friend, amnt, msg])
     return redirect(loadChat, friend=friend)
 
 
-def removeNameFromString(group_members,user_name):
+def removeNameFromString(group_members, user_name):
     friends = group_members.split('_')
     friends.remove(user_name)
     return '_'.join(friends)
 
 
-def clearChat(request,friend):
+def clearChat(request, friend):
     cursor = connection.cursor()
     dbName1 = friend+'_'+str(request.user)
     dbName2 = str(request.user)+'_'+friend
-    cursor.execute("delete from user_to_user_mapping where user_to_user=%s or user_to_user=%s",[dbName1,dbName2])
-    cursor.execute("delete from amount_messages_user_to_user where (sender=%s and receiver=%s) or (sender=%s and receiver=%s)",[friend,str(request.user),str(request.user),friend])
-    #fetch group members then remove user name then update the data in DB
-    cursor.execute("select group_members from users_to_group_mapping where group_name=%s",[friend])
-    group_members=cursor.fetchall()
+    cursor.execute("delete from splitwise_user_to_user_mapping where user_to_user=%s or user_to_user=%s", [
+                   dbName1, dbName2])
+    cursor.execute("delete from splitwise_amount_messages_user_to_user where (sender=%s and receiver=%s) or (sender=%s and receiver=%s)", [
+                   friend, str(request.user), str(request.user), friend])
+    # fetch group members then remove user name then update the data in DB
+    cursor.execute(
+        "select group_members from splitwise_users_to_group_mapping where group_name=%s", [friend])
+    group_members = cursor.fetchall()
     if group_members != []:
-        #remove user share from the group
-        cursor.execute("delete from amount_messages_users_to_group where sender=%s and group_name=%s",[str(request.user),friend])
-        cursor.execute("select count_of_users from users_to_group_mapping where group_name = %s",[friend])
+        # remove user share from the group
+        cursor.execute("delete from splitwise_amount_messages_users_to_group where sender=%s and group_name=%s", [
+                       str(request.user), friend])
+        cursor.execute(
+            "select count_of_users from splitwise_users_to_group_mapping where group_name = %s", [friend])
         count = cursor.fetchall()
         count = count[0][0]
         if count == 2:
-            cursor.execute("delete from users_to_group_mapping where group_name = %s",[friend])
-            cursor.execute("delete from amount_messages_users_to_group where group_name =%s",[friend])
+            cursor.execute(
+                "delete from splitwise_users_to_group_mapping where group_name = %s", [friend])
+            cursor.execute(
+                "delete from splitwise_amount_messages_users_to_group where group_name =%s", [friend])
         else:
-            cursor.execute("update amount_messages_users_to_group set amount = (amount*(%s-1))/%s",[count,count])
-            group_members = removeNameFromString(group_members[0][0],str(request.user))
-            cursor.execute("update users_to_group_mapping SET group_members = %s, count_of_users=count_of_users-1 where group_name = %s",[group_members,friend])
+            cursor.execute(
+                "update splitwise_amount_messages_users_to_group set amount = (amount*(%s-1))/%s", [count, count])
+            group_members = removeNameFromString(
+                group_members[0][0], str(request.user))
+            cursor.execute(
+                "update splitwise_users_to_group_mapping SET group_members = %s, count_of_users=count_of_users-1 where group_name = %s", [group_members, friend])
     return redirect(home)
+
+
+def divideAmountForGroupGivings(i_spent_for_group, others_spent,group_name):
+    no_of_members = getNoOfMembersInAGroup(group_name)
+    i_spent_for_each = float(i_spent_for_group/no_of_members)
+    givings_for_group = []
+    for other_spent in others_spent:
+        friend_spent_for_me = float(others_spent[other_spent]/no_of_members)
+        if i_spent_for_each - friend_spent_for_me != 0:
+            element =[]
+            element.append(other_spent)
+            element.append(i_spent_for_each - friend_spent_for_me)
+            givings_for_group.append(element)
+    return givings_for_group
+
+
+def groupGivings(request,friend):
+    cursor =connection.cursor()
+    msges_with_names = getMessagesWithAUser(str(request.user), friend)
+    i_spent_for_group = 0
+    other_mem ={}
+    cursor.execute("select group_members from splitwise_users_to_group_mapping where group_name = %s",[friend])
+    group_members = getUsersInGroupAsList((cursor.fetchall())[0][0])
+    for member in group_members:
+        if member != str(request.user):
+            other_mem[member] = 0
+    #calculating every persons expenditure in a group
+    for msg in msges_with_names:
+        if msg[0] == str(request.user):
+            i_spent_for_group += msg[2]
+        else:
+            other_mem[msg[0]] += msg[2]
+    givings_for_group = divideAmountForGroupGivings(i_spent_for_group, other_mem, friend)
+    return render(request,'group_givings.html',{'givings':givings_for_group,'group':friend})

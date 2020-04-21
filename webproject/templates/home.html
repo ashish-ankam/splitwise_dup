@@ -38,6 +38,10 @@
         function clearChat(){
             window.location.href="/clearChat/"+document.getElementById("friend_name").innerHTML;
         }
+
+        function groupGivings(){
+            window.location.href = "/groupGivings/"+document.getElementById("friend_name").innerHTML;
+        }
     </script>
     <style>
         #send{
@@ -71,9 +75,14 @@
             color: green;
         }
         #clear{
-            width: 150px;
-            margin-left: 330px;
+            width: 60px;
+            margin-left: 100px;
             background-color: red;
+        }
+        #givings{
+            width: 110px;
+            margin-left: 10px;
+            background-color: chocolate;
         }
     </style>
 </head>
@@ -152,7 +161,10 @@
                                         {% elif receive_from_friend is not None %}
                                         <b id="individual_green">AMOUNT =  + {{receive_from_friend}}</b>
                                         {%endif%}
-                                        <input type="button" onclick="clearChat()" value="Clear history" name="clear" id="clear">
+                                        {%if group is not None%}
+                                        <input type="button" onclick="groupGivings()" value="group givings" name="givings" id="givings">
+                                        {%endif%}
+                                        <input type="button" onclick="clearChat()" value="clear" name="clear" id="clear">
                                     </div>
                                 </div>
 
