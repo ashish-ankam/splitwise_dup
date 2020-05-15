@@ -1,13 +1,288 @@
 {% load static %}
+
 {% static "media/pics" as baseUrl %}
 <html>
 
 <head>
-    <title>Splitwise</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'home.css' %}" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{% static 'homeboot.css' %}" rel="stylesheet" id="bootstrap-css">
+    <script src="{% static 'boot.js' %}"></script>
+    <script src="{% static 'jquer.js' %}"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="{% static 'home.css' %}" type="text/css" rel="stylesheet" />
+    <style type="text/css">
+        .container {
+            max-width: 1170px;
+            margin: auto;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .inbox_people {
+            background: #EDE0A1 none repeat scroll 0 0;
+            float: left;
+            overflow: hidden;
+            width: 40%;
+            border-right: 1px solid #c4c4c4;
+        }
+
+        .inbox_msg {
+            border: 1px solid #81E643;
+            clear: both;
+            overflow: hidden;
+        }
+
+        .top_spac {
+            margin: 20px 0 0;
+        }
+
+
+        .recent_heading {
+            float: left;
+            width: 40%;
+        }
+
+        .srch_bar {
+            display: inline-block;
+            text-align: right;
+            width: 60%;
+        }
+
+        .headind_srch {
+            padding: 10px 29px 10px 20px;
+            overflow: hidden;
+            border-bottom: 1px solid #c4c4c;
+        }
+
+        .recent_heading h4 {
+            color: #000207;
+            font-size: 21px;
+            margin: auto;
+        }
+
+        .srch_bar input {
+            border: 1px solid #000207;
+            border-width: 0 0 1px 0;
+            width: 80%;
+            padding: 2px 0 4px 6px;
+            background: none;
+        }
+
+        .srch_bar .input-group-addon button {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            border: medium none;
+            padding: 0;
+            font-size: 18px;
+        }
+
+        .srch_bar .input-group-addon {
+            margin: 0 0 0 -27px;
+        }
+
+        .chat_ib h5 {
+            font-size: 15px;
+            color: #000207;
+            margin: 0 0 8px 0;
+        }
+
+        .chat_ib h5 span {
+            font-size: 13px;
+            float: right;
+        }
+
+        .chat_ib p {
+            font-size: 14px;
+            color: #000207;
+            margin: auto
+        }
+
+        .chat_img {
+            float: left;
+            width: 10%;
+        }
+
+        .chat_ib {
+            float: left;
+            padding: 0 0 0 15px;
+            width: 88%;
+        }
+
+        .chat_people {
+            overflow: hidden;
+            clear: both;
+        }
+
+        .chat_list {
+            border-bottom: 1px solid #454B4B;
+            margin: 0;
+            padding: 18px 16px 10px;
+        }
+
+        .inbox_chat {
+            height: 550px;
+            overflow-y: scroll;
+        }
+
+        .active_chat {
+            background: #E5E5C0;
+        }
+
+        .incoming_msg_img {
+            display: inline-block;
+            width: 6%;
+        }
+
+        .received_msg {
+            display: inline-block;
+            padding: 0 0 0 10px;
+            vertical-align: top;
+            width: 92%;
+        }
+
+        .received_withd_msg p {
+            background: #DBEE95 none repeat scroll 0 0;
+            border-radius: 3px;
+            color: #030303;
+            font-size: 14px;
+            margin: 0;
+            padding: 5px 10px 5px 12px;
+            width: 100%;
+        }
+
+        .received_withd_msg {
+            width: 57%;
+        }
+
+        .mesgs {
+            float: left;
+            padding: 27px 15px 0 25px;
+            width: 50%;
+        }
+
+        .sent_msg p {
+            background: #05728f none repeat scroll 0 0;
+            border-radius: 3px;
+            font-size: 14px;
+            margin: 0;
+            color: #fff;
+            padding: 5px 10px 5px 12px;
+            width: 100%;
+        }
+
+        .outgoing_msg {
+            overflow: hidden;
+            margin: 26px 0 26px;
+        }
+
+        .sent_msg {
+            float: right;
+            width: 56%;
+        }
+
+        .input_msg_write input {
+            background: #ECE9B8 none repeat scroll 0 0;
+            border: medium none;
+            color: #080807;
+            font-size: 15px;
+            min-height: 48px;
+            width: 100%;
+        }
+
+        .type_msg {
+            border-top: 1px solid #c4c4c4;
+            position: relative;
+        }
+
+        .msg_send_btn {
+            background: #13CD1E none repeat scroll 0 0;
+            border: medium none;
+            border-radius: 50%;
+            color: #fff;
+            cursor: pointer;
+            font-size: 17px;
+            height: 33px;
+            position: absolute;
+            right: 0;
+            top: 11px;
+            width: 33px;
+        }
+
+        .messaging {
+            padding: 0 0 50px 10px;
+        }
+
+        .msg_history {
+            height: 416px;
+            overflow-y: auto;
+        }
+        .inbox_msg{
+            background-image:url(/static/background.jpeg);
+        }
+        i:hover{
+            background-color: gray;
+            cursor: pointer;
+        }
+        .chat_list:hover{
+            background-color: tomato;
+        }
+          input:hover {
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+          }
+        .type_msg{
+            width: 800px;
+            right: 24px;
+            bottom: 15px;
+        }
+        #individual_red{
+            margin-left: 100;
+            margin-top: 100;
+            color: red;
+        }
+        #individual_green{
+            margin-left: 100;
+            margin-top: 100;
+            color: green;
+        }
+        #red{
+            margin-left: 100;
+            color: red;
+        }
+        #green{
+            margin-left: 100;
+            color: green;
+        }
+        #givings{
+            width: 110px;
+            margin-left: 10px;
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 120px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.1s;
+        }
+        #clear{
+            width: 60px;
+            margin-left: 10px;
+            background-color: rgb(236, 9, 9); /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 10px;
+            cursor: pointer;
+            -webkit-transition-duration: 5.0s; /* Safari */
+            transition-duration: 0.1s;
+        }
+    </style>
     <script>
         function loadChat(temp_this) {
             var a = document.getElementsByName("temp_text");
@@ -43,171 +318,108 @@
             window.location.href = "/groupGivings/"+document.getElementById("friend_name").innerHTML;
         }
     </script>
-    <style>
-        #send{
-            margin-top: 40;
-        }
-        .wa-chat{
-            background-image:url(/static/background.jpeg);
-        }
-        #red{
-            margin-left: 100;
-            color: red;
-        }
-        #green{
-            margin-left: 100;
-            color: green;
-        }
-        #add{
-            margin-left: -10;
-        }
-        #addGroup{
-            margin-left: -48;
-        }
-        #individual_red{
-            margin-left: 100;
-            margin-top: 100;
-            color: red;
-        }
-        #individual_green{
-            margin-left: 100;
-            margin-top: 100;
-            color: green;
-        }
-        #clear{
-            width: 60px;
-            margin-left: 100px;
-            background-color: red;
-        }
-        #givings{
-            width: 110px;
-            margin-left: 10px;
-            background-color: chocolate;
-        }
-    </style>
+
 </head>
 
 <body>
-    <form name="form" method="POST" style="overflow-x: hidden;">
+    <form name="form" method="POST">
         {% csrf_token %}
         <input name="temp_text" type="text" hidden>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-3">
-                    <div class="row wa-navbar">
-                        <div class="col-8">
-                            <img src="" class="rounded-circle" />
-                            <b>{{user}}</b>
+    <div class="container">
+        <div class="messaging" style="height: 100px;">
+            <div class="inbox_msg" style="height:596px;">
+                <div class="inbox_people" style="width: 300px">
+                    <p style="font-weight: bold;">&emsp;Current User - {{user}} </p>
+                    <p>
+                        {% if give is not None %}
+                        <b id="red">TOTAL = - {{give}}</b> 
+                        {% elif receive is not None %}
+                        <b id="green">TOTAL = + {{receive}}</b>
+                        {% endif %}
+                    </p>
+                    &emsp;
+                    <i id="addGroup" class="add" onclick="add_group()"><b>New Group</b></i>
+                    &emsp;
+                    <b>or</b>
+                    &emsp;
+                    <i id="add" class="add" onclick="add_user()"><b>Add Friend</b></i>
+                    <div class="headind_srch">
+                        <div class="recent_heading">
+                            <b>FRIENDS</b>
                         </div>
-                        <div class="col-2">
-                            <i id="addGroup" class="large material-icons wa-icon" onclick="add_group()">group</i>
-                        </div>
-                        <div class="col-2">
-                            <i id="add" class="large material-icons wa-icon" onclick="add_user()">add</i>
-                        </div>
+                        <hr>
                     </div>
-
-                    <div class="row">
-                        <div class="col-12 wa-contatos">
-                            {% if give is not None %}
-                                <b id="red">TOTAL = - {{give}}</b> 
-                            {% elif receive is not None %}
-                                <b id="green">TOTAL = + {{receive}}</b>
-                            {% endif %}
-                            <br/>
-                            <b>Friends</b>
+                   
+                    <div class="inbox_chat">
+                        {% for friend in friends%}
+                        <div class="chat_list" style="cursor: pointer;"  onclick="loadChat(this)">
+                            <div class="chat_people">
+                                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <div class="chat_ib">
+                                    <b id="hi">{{friend}}</b>
+                                </div>
+                            </div>
                         </div>
+                        {%endfor%}
+                        <div class="headind_srch">
+                            <div class="recent_heading">
+                                <b>GROUPS</b>
+                            </div>
+                            <hr>
+                        </div>
+                        {% for group in groups%}
+                        <div class="chat_list" style="cursor: pointer;" onclick="loadChat(this)">
+                            <div class="chat_people">
+                                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <div class="chat_ib">
+                                    <b id="hi">{{group}}</b>
+                                </div>
+                            </div>
+                        </div>
+                        {%endfor%}
                     </div>
-                    
-                    {% for friend in friends%}
-                    <div class="row wa-item-chat" onclick="loadChat(this)">
-                        <div class="col-2">
-                            <img src="" alt="dp" class="rounded-circle" />
-                        </div>
-                        <div class="col-8">
-                            <b id="hi">{{friend}}</b><br />
-                        </div>
-                    </div>
-                        <hr />
-                    {%endfor%}
-                    <br/>
-                        <b>Groups</b>
-                    {% for group in groups%}
-                    <div class="row wa-item-chat" onclick="loadChat(this)">
-                        <div class="col-2">
-                            <img src="" alt="dp" class="rounded-circle" />
-                        </div>
-                        <div class="col-8">
-                            <b id="hi">{{group}}</b><br />
-                        </div>
-                    </div>
-                        <hr />
-                    {%endfor%}
-
                 </div>
                 {% if chat is not None%}
-                <div class="col-9">
-                    <div class="wa-navbar">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-1">
-                                    <img src="" class="rounded-circle" />
+                <div style="margin-top: 1px;background-color:seashell;height:40px;">
+                    &nbsp;
+                    <div class="chat_img" style="width: 35px;padding-top:3px;padding-left:3px;"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                    <b><span id="friend_name" style="font-size: 20px;">{{friend}}</span></b>
+                    {% if give_to_friend is not None %}    
+                    <b id="individual_red">AMOUNT =  - {{give_to_friend}}</b>
+                    {% elif receive_from_friend is not None %}
+                    <b id="individual_green">AMOUNT =  + {{receive_from_friend}}</b>
+                    {%endif%}
+                    {%if group is not None%}
+                    <input type="button" onclick="groupGivings()" value="group givings" name="givings" id="givings">
+                    {%endif%}
+                    <input type="button" onclick="clearChat()" value="clear" name="clear" id="clear">
+                </div>
+                <div class="mesgs" style="width: 817px">
+                    <div class="msg_history">
+                        {%for msg in messages%}
+                        {%if msg.0 != user%}
+                        <div class="incoming_msg">
+                            <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" width="30px" alt="sunil"> </div>
+                            <div class="received_msg" style="padding: 3px;">
+                                <div class="received_withd_msg">
+                                    <p><b>From {{msg.0}} :</b>  {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}</p>
                                 </div>
-                                <div class="col-9">
-                                    <div style="margin-top: 10px">
-                                        <span id="friend_name" style="font-size: 20px">{{friend}}</span>
-                                        {% if give_to_friend is not None %}    
-                                        <b id="individual_red">AMOUNT =  - {{give_to_friend}}</b>
-                                        {% elif receive_from_friend is not None %}
-                                        <b id="individual_green">AMOUNT =  + {{receive_from_friend}}</b>
-                                        {%endif%}
-                                        {%if group is not None%}
-                                        <input type="button" onclick="groupGivings()" value="group givings" name="givings" id="givings">
-                                        {%endif%}
-                                        <input type="button" onclick="clearChat()" value="clear" name="clear" id="clear">
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
-
-                    </div>
-
-                    <div class="wa-chat">
-                        <div>
-                            {%for msg in messages%}
-                            {%if msg.0 == user%}
-                            <div class="row">
-                                <div class="offset-6 col-5">
-                                    <div class="card wa-card-chat wa-card-green">
-                                        <b>Me :</b>  {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}  
-                                    </div>
-                                </div>
+                        {% else %}
+                        <div class="outgoing_msg">
+                            <div class="sent_msg">
+                                <p><b>Me :</b>  {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}} </p>
                             </div>
-                            {% else %}
-                            <div class="row">
-                                <div class="col-5">
-                                    <div class="card wa-card-chat wa-card-default">     
-                                        <b>From {{msg.0}} :</b>  {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}
-                                    </div>
-                                </div>
-                            </div>
-                            {%endif%}
-                            {%endfor%}
                         </div>
+                        {%endif%}
+                        {%endfor%}
                     </div>
-                    
-                    <div class="wa-panel-texto">
-                        <div style="text-align: center">
-                            <div class="row">
-                                <div class="col-10">
-                                    <input id="amnt" name="amnt" type="number" class="form-control wa-input" placeholder="Enter the amount - Default is 0">
-                                    <input id="msg" name="msg" class="form-control wa-input" placeholder="Type a message"/>
-                                </div>
-                                <div class="col-1">
-                                    <i id="send" name="send" class="large material-icons wa-icon" onclick="sendMsge()">send</i>
-                                </div>
-                            </div>
+                    <i id="send" name="send" style="position:relative; left:779px; bottom:-50px;" class="material-icons" onclick="sendMsge()">send</i>
+                    <div class="type_msg">
+                        <div class="input_msg_write">
+                            <input id="amnt" name="amnt" type="number" class="form-control wa-input" placeholder="Enter the amount - Default is 0">
+                            <input id="msg" name="msg" class="form-control wa-input" placeholder="Type a message"/>
                         </div>
                     </div>
                 </div>
@@ -215,6 +427,7 @@
             </div>
 
         </div>
+    </div>
     </form>
 </body>
 
