@@ -1,6 +1,4 @@
--> GitHub Link
-	https://github.com/sritej-reddy/splitwise_dup
--> To run this project on your local machine follow these steps
+To run this project on your local machine follow these steps
 	1. Clone git repository into your machine
 	2. Open any IDE of your choice then open the cloned folder
 	3. Make sure postgreSQL is installed successfully on your machine then create a database named "webproject" using 
@@ -11,4 +9,5 @@
 		4.3. 'python manage.py migrate'
 	5. Now run 'python manage.py runserver'
 	6. Then enter search for 'http://127.0.0.1:8000/' in your browser
--> If that sounds a headache, just browse for 'http://split-wiser.herokuapp.com/' and start using it.
+
+If that sounds a headache, just browse for 'http://split-wiser.herokuapp.com/' and start using it.
