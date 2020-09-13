@@ -1,0 +1,515 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		
+<!------ Include the above in your HEAD tag ---------->
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Chat</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js">
+            	$(document).ready(function(){
+                    $('#action_menu_btn').click(function(){
+                        $('.action_menu').toggle();
+                    });
+                });
+        
+        </script>
+        <style>
+        	body,html{
+			height: auto;
+			margin: 0px;
+               	background: black;
+	       background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+	        background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+		}
+
+		.chat{
+            
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+		.card{
+			height: 960px;
+			border-radius: 15px !important;
+			background-color:lightgray;
+		
+		
+		}
+	
+
+		.contacts_body{
+			padding:  0.75rem 0 !important;
+			overflow-y: auto;
+            overflow-x: auto;
+			white-space: nowrap;
+            height: 500px;
+            min-width: inherit;
+		}
+		.msg_card_body{
+			overflow-y: auto;
+		}
+		.card-header{
+			border-radius: 15px 15px 0 0 !important;
+			border-bottom: 0 !important;
+		}
+	 .card-footer{
+		border-radius: 0 0 15px 15px !important;
+			border-top: 0 !important;
+         top:+40%;
+         
+	}
+		.container{
+			align-content: center;
+		}
+		.search{
+			border-radius: 10px 0 0 10px !important;
+			background-color: grey!important;
+			border:0 !important;
+			color:black !important;
+		}
+		.search:focus{
+		     box-shadow:none !important;
+           outline:0px !important;
+		}
+		.type_msg{
+			background-color: gry !important;
+			border:0 !important;
+			color:black!important;
+			height: 60px !important;
+			overflow-y: auto;
+		}
+			.type_msg:focus{
+		     box-shadow:none !important;
+           outline:0px !important;
+		}
+		.attach_btn{
+	border-radius: 15px 0 0 15px !important;
+	background-color:black !important;
+			border:0 !important;
+			color: white !important;
+			cursor: pointer;
+		}
+		.send_btn{
+	border-radius: 0 15px 15px 0 !important;
+	background-color: black!important;
+			border:0 !important;
+			color: grey !important;
+			cursor: pointer;
+		}
+		.search_btn{
+			border-radius: 0 15px 15px 0 !important;
+			background-color: grey !important;
+			border:0 !important;
+			color: black!important;
+			cursor: pointer;
+		}
+		.contacts{
+			list-style: none;
+			padding: 0;
+		}
+		.contacts li{
+			width: 100% !important;
+			padding: 5px 10px;
+			margin-bottom: 15px !important;
+		}
+		.user_img{
+			height: 50px;
+			width: 50px;
+			border:1.5px solid grey;
+		
+		}
+		.user_img_msg{
+			height: 20px;
+			width: 20px;
+			border:1.5px solid black;
+		
+		}
+	.img_cont{
+			position: relative;
+			height: 70px;
+			width: 70px;
+	}
+	.img_cont_msg{
+			height: 50px;
+			width: 50px;
+         font-family: sans-serif;
+	}
+
+	.user_info{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-left: 15px;
+	}
+	.user_info span{
+		font-size: 20px;
+		color: black;
+        font-family: sans-serif;
+	}
+	.user_info p{
+	font-size: 10px;
+	color: black;
+         font-family: sans-serif;
+	}
+	.video_cam{
+		margin-left: 50px;
+		margin-top: 5px;
+	}
+	.video_cam span{
+		color: black;
+		font-size: 20px;
+		cursor: pointer;
+		margin-right: 20px;
+	}
+	.msg_cotainer{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-left: 10px;
+		border-radius: 25px;
+		background-color: whitesmoke;
+		padding: 10px;
+        height:auto;
+		position: relative;
+	}
+	.msg_cotainer_send{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-right: 10px;
+		border-radius: 25px;
+		background-color: grey;
+		padding: 10px;
+        height: auto;
+		position: relative;
+	}
+	.msg_time{
+		position: absolute;
+		left: 0;
+		bottom: -15px;
+		color:black ;
+		font-size: 10px;
+	}
+	.msg_time_send{
+		position: absolute;
+		right:0;
+		bottom: -15px;
+		color: black;
+		font-size: 10px;
+	}
+	.msg_head{
+		position: relative;
+	}
+	#action_menu_btn{
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		color: black;
+		cursor: pointer;
+		font-size: 20px;
+	}
+	.action_menu{
+		z-index: 1;
+		position: absolute;
+		padding: 15px 0;
+		background-color: rgba(0,0,0,0.5);
+		color: white;
+		border-radius: 15px;
+		top: 30px;
+		right: 15px;
+		display: none;
+	}
+	.action_menu ul{
+		list-style: none;
+		padding: 0;
+	margin: 0;
+	}
+	.action_menu ul li{
+		width: 100%;
+		padding: 10px 15px;
+		margin-bottom: 5px;
+	}
+	.action_menu ul li i{
+		padding-right: 10px;
+	
+	}
+	.action_menu ul li:hover{
+		cursor: pointer;
+		background-color: rgba(0,0,0,0.2);
+	}
+	@media(max-width: 1000px){
+	.contacts_card{
+		margin-bottom: 15px !important;
+	}
+         #sidebatch{
+             position: relative;
+    width: 30px; 
+    }
+	.card{
+		bottom:2rem;
+	}
+
+	}</style>
+	</head>
+	<p hidden id="group">{{group}}</p>
+	<p hidden id = "user_id">{{user_id}}</p>
+	<p hidden id = "friend_id">{{friend_id}}</p>
+    <div class="container mt-5">
+		<div class="row h-100 justify-content-center align-items-center">
+			<div class="row-md-8">
+			   <div class="card" style="width: 50rem ;height : 80%;" >
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+								<div class="user_info">
+									<span style="padding: 1rem;" id = "friend">{{friend_name}}</span>
+								</div><div>
+								<span class="label label-danger" style="padding: 1rem;" id = "neg-amnt" style="visibility: hidden;"></span>
+								<span class="label label-success" style="padding: 1rem;" id= "pos-amnt" style="visibility: hidden;"></span></div>
+								<div>
+								<button type="button" style="padding: 1rem;" class="btn btn-danger" onclick="clearChat()">Clear Chat</button>
+							</div>
+							<div>{% ifnotequal group "0" %}
+								<button type="button" style="padding: 1rem;" class="btn btn-warning" onclick="groupGivings()">Group Givings</button>
+								{% endifnotequal %}</div>
+						</div>
+						
+						</div>
+						<div class="card-body msg_card_body" id="msges">
+					
+						</div>
+						<div class="card-footer">
+							<div class="input-group">
+								<input type="number" id="amnt" name="" class="form-control type_msg" placeholder="Enter the amount - Default is 0">
+								<input type="text" id="msg" name="" class="form-control type_msg" placeholder="Type a message">
+								<div class="input-group-append"  onclick="sendMsge()">
+									<span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+    </div>
+
+	</body>
+	<script>
+		limit = 10;
+		offset = 0;
+		setInterval(getNewMsges,3000);
+		flag = true;
+		function clearChat(){
+            window.location.href="/clearChat?friend_id="+document.getElementById("friend_id").innerHTML+"&user_id="+document.getElementById("user_id").innerHTML+"&group="+document.getElementById("group").innerHTML;
+        }
+
+        function groupGivings(){
+            window.location.href = "/groupGivings?friend_id="+document.getElementById("friend_id").innerHTML+"&user_id="+document.getElementById("user_id").innerHTML+"&friend="+document.getElementById("friend").innerHTML+"&group="+document.getElementById("group").innerHTML;
+        }
+		function sendMsge() {
+            if(document.getElementById("msg").value == ""){
+                alert("message is mandatory!!!");
+            }
+            else{
+                var data = "friend_id="+document.getElementById('friend_id').innerHTML+"&msg="+document.getElementById("msg").value+"&amnt="+document.getElementById("amnt").value+"&group="+document.getElementById('group').innerHTML+"&user_id="+document.getElementById('user_id').innerHTML;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if(xhttp.responseText=="true"){
+                            document.getElementById("msg").value="";
+                            document.getElementById("amnt").value="";
+                        }
+                    }
+                  };
+                xhttp.open("POST", '/saveMsgToDb', true);
+                xhttp.setRequestHeader("X-CSRFToken", "{{csrf_token}}");
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send(data);
+            }
+		}
+		function getNewMsges(){
+            var url = "/getNewMsges?friend_id="+document.getElementById('friend_id').innerHTML+"&limit="+limit+"&group="+document.getElementById("group").innerHTML+"&user_id="+document.getElementById('user_id').innerHTML; //if its a group then flag will be set
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+					var msges = JSON.parse(xhttp.responseText);
+					var msges_len = msges.length;
+					var existing = document.getElementsByName('msg');
+					var existing_len = existing.length;
+					var count= existing_len;
+					if(existing_len>msges_len){
+						count=msges_len;
+					}
+					var i = msges_len-1, j = existing_len-1,temp = count;
+					
+					if(existing_len!=0){
+						while(count--){
+							if(existing[j].querySelector('p').innerHTML!=msges[i][4]){
+								i--;
+								continue;
+							}
+							break;
+						}
+						if(i==-1){
+							i=msges_len-1;
+						}else
+							i-=1;
+					}
+					var user_id = document.getElementById('user_id').innerHTML;
+					var bit  = 0;
+					for(i;i>-1;i--){
+						bit = 1;
+						offset+=1;
+						if(msges[i][3] == user_id){
+							var existing_parent = document.getElementById('msges');
+							var new_msg = document.createElement('div');
+							new_msg.setAttribute("class",'d-flex justify-content-end mb-4');
+							new_msg.setAttribute("name",'msg');
+							var msg_contai = document.createElement('div');
+							msg_contai.setAttribute("class",'msg_cotainer_send');
+							var main_content = document.createElement('span');
+							main_content.setAttribute("id",'content');
+							main_content.innerHTML = msges[i][1]+' for '+msges[i][2];
+							var sender = document.createElement('span');
+							sender.setAttribute("class",'msg_time_send');
+							sender.innerHTML = msges[i][0];
+							var msg_id = document.createElement('p');
+							msg_id.style.visibility = "hidden";
+							msg_id.innerHTML = msges[i][4];
+							msg_contai.append(main_content);
+							msg_contai.append(sender);
+							new_msg.append(msg_id);
+							new_msg.append(msg_contai);
+							existing_parent.append(new_msg);
+						}else{
+							var existing_parent = document.getElementById('msges');
+							var new_msg = document.createElement('div');
+							new_msg.setAttribute("class",'d-flex justify-content-start mb-4');
+							new_msg.setAttribute("name",'msg');
+							var msg_contai = document.createElement('div');
+							msg_contai.setAttribute("class",'msg_cotainer');
+							var main_content = document.createElement('span');
+							main_content.setAttribute("id",'content');
+							main_content.innerHTML = msges[i][1]+' for '+msges[i][2];
+							var sender = document.createElement('span');
+							sender.setAttribute("class",'msg_time');
+							sender.innerHTML = msges[i][0];
+							var msg_id = document.createElement('p');
+							msg_id.style.visibility = "hidden";
+							msg_id.innerHTML = msges[i][4];
+							msg_contai.append(main_content);
+							msg_contai.append(sender);
+							new_msg.append(msg_id);
+							new_msg.append(msg_contai);
+							existing_parent.append(new_msg);
+						}
+					}
+					if(bit==1){
+						getAmount();
+						bit = 0;
+					}
+					if(flag == true){
+						flag = false;
+					}
+					else{
+						flag = true;
+					}
+					if(flag == true){
+						getOlderMsges();
+					}
+                }
+            }
+            xhttp.open("GET", url, true);
+			xhttp.send();
+		}
+		function getOlderMsges(){
+            var url = "/getOlderMsges?friend_id="+document.getElementById('friend_id').innerHTML+"&limit="+limit+"&group="+document.getElementById("group").innerHTML+"&user_id="+document.getElementById('user_id').innerHTML+"&offset="+offset; //if its a group then flag will be set
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var msges = JSON.parse(xhttp.responseText);
+					var msges_len = msges.length;
+					offset = offset + msges_len;
+					var existing = document.getElementsByName('msg');
+					var existing_len = existing.length;
+					var count= existing_len;
+					if(existing_len>msges_len){
+						count=msges_len;
+					}
+					var i = 0, j = existing_len-1,temp = count;
+					var user_id = document.getElementById('user_id').innerHTML;
+					var new_older;
+					for(i;i<msges_len;i++){
+						if(msges[i][3] == user_id){
+							var existing_parent = document.getElementById('msges');
+							var new_msg = document.createElement('div');
+							new_msg.setAttribute("class",'d-flex justify-content-end mb-4');
+							new_msg.setAttribute("name",'msg');
+							var msg_contai = document.createElement('div');
+							msg_contai.setAttribute("class",'msg_cotainer_send');
+							var main_content = document.createElement('span');
+							main_content.setAttribute("id",'content');
+							main_content.innerHTML = msges[i][1]+' for '+msges[i][2];
+							var sender = document.createElement('span');
+							sender.setAttribute("class",'msg_time_send');
+							sender.innerHTML = msges[i][0];
+							var msg_id = document.createElement('p');
+							msg_id.style.visibility = "hidden";
+							msg_id.innerHTML = msges[i][4];
+							msg_contai.append(main_content);
+							msg_contai.append(sender);
+							new_msg.append(msg_id);
+							new_msg.append(msg_contai);
+							existing_parent.insertBefore(new_msg,existing[0]);
+						}else{
+							var existing_parent = document.getElementById('msges');
+							var new_msg = document.createElement('div');
+							new_msg.setAttribute("class",'d-flex justify-content-start mb-4');
+							new_msg.setAttribute("name",'msg');
+							var msg_contai = document.createElement('div');
+							msg_contai.setAttribute("class",'msg_cotainer');
+							var main_content = document.createElement('span');
+							main_content.setAttribute("id",'content');
+							main_content.innerHTML = msges[i][1]+' for '+msges[i][2];
+							var sender = document.createElement('span');
+							sender.setAttribute("class",'msg_time');
+							sender.innerHTML = msges[i][0];
+							var msg_id = document.createElement('p');
+							msg_id.style.visibility = "hidden";
+							msg_id.innerHTML = msges[i][4];
+							msg_contai.append(main_content);
+							msg_contai.append(sender);
+							new_msg.append(msg_id);
+							new_msg.append(msg_contai);
+							existing_parent.insertBefore(new_msg,existing[0]);
+						}
+					}
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+		}
+		function getAmount(){
+			var url = "/amountForChat?friend_id="+document.getElementById('friend_id').innerHTML+"&group="+document.getElementById("group").innerHTML+"&user_id="+document.getElementById('user_id').innerHTML; //if its a group then flag will be set
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+				
+					if(xhttp.responseText[0]=='-'){
+						document.getElementById('pos-amnt').style.visibility="hidden";
+						document.getElementById('neg-amnt').style.visibility="visible";
+						document.getElementById('neg-amnt').innerHTML = "Amount = "+xhttp.responseText;
+					}else{
+						document.getElementById('neg-amnt').style.visibility="hidden";
+						document.getElementById('pos-amnt').style.visibility="visible";
+						document.getElementById('pos-amnt').innerHTML = "Amount = "+xhttp.responseText;
+					}
+				}
+			}
+			xhttp.open("GET", url, true);
+			xhttp.send();
+		}
+	</script>
+</html>

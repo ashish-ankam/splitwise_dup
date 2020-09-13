@@ -1,113 +1,157 @@
-{% load static %}
-<!DOCTYPE HTML>
+
+
 <html>
 
-<head>
-    <title>Create Group :: Split-Wiser</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'addUser.css'%}">
-    <script src="{%static 'addUser.js' %}"></script>
+    <head>
+        <title>Create Group :: Split-Wiser</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
     <style>
-          #myInput {
-            border-radius: 10px;
-            width: 500px;
-            height: 30px;
-            color: black;
-            margin-left: -65px;
-          }
-          
-          #ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-          }
-          
-          #ul li a {
-            border: 1px solid #ddd;
-            margin-top: -1px; /* Prevent double borders */
-            background-color:cornsilk;
-            padding: 5px;
-            text-decoration: none;
-            font-size: 18px;
-            color: black;
-            display: block;
-            height: 30px;
-          }
-          
-          #ul li a:hover:not(.header) {
-            background-color: #eee;
-          }
-    </style>
-</head>
-
-<body>
-    <form method="POST" name='form'>
-    {% csrf_token %}
-    <h3 style="margin-right: 600px;">Type the name to search</h3>
-    <input style="margin-right: 600px;" type="text" id="myInput" name="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
-    <p></p>
-    <ul id="ul" style="margin-left: -300px;">
-        {%for user in users%}
-            <li><a>{{user.username}}</a></li>
-        {%endfor%}
-    </ul>
-    <br/>
-    <ul id="addedList" style="margin-left: 300px;margin-top: -130px;" name="grp_mem">       
-    </ul>
-    <input type="submit" value="proceed" style="margin-left: 300px;" onclick="createGroup()">
-    <input type="text" hidden name="group_mem" id="group_mem">
-</form>
-</body>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("ul[id*=ul] li").click(function() {
-                var task, list_ele, list, x_butt,name;   
-                list = document.getElementById("addedList");
-                list_ele = document.createElement('li');
-                list_ele.className="addList";
-                /*x_butt = document.createElement('span');
-                x_butt.appendChild(document.createTextNode("\u00D7"));
-                x_butt.className = "close";
-                x_butt.addEventListener("click", remove);*/
-                name = $(this).html();
-                list_ele.appendChild(document.createTextNode(name.slice(3,name.length-4)));
-                list.appendChild(list_ele);
-                //list_ele.appendChild(x_butt);
-                list.appendChild(document.createElement('p'));
-            });
-    });
-    function myFunction() {
-        var input, filter, ul, li, a, i, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        ul = document.getElementById("ul");
-        li = ul.getElementsByTagName("li");
-        for (i = 0; i < li.length; i++) {
-            a = li[i].getElementsByTagName("a")[0];
-            txtValue = a.textContent || a.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                li[i].style.display = "";
-            } else {
-                li[i].style.display = "none";
+        body,html{
+                height: auto;
+                margin: 0px;
+                       background: black;
+            object-position: center;
+            border-radius: 15px;
+               background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+                background: linear-gradient(to right, #91EAE4, #86A8E7,#91EAE4 );
+            }
+              #myInput {
+                border-radius: 15px;
+                width: 360px;
+                height: 40px;
+                color: grey;
+              }
+              
+              
+              #ul li a {
+                border: 3px solid black;
+                margin-top: -1px; /* Prevent double borders */
+                background-color:black;
+                padding: 6px;
+                text-decoration:none;
+                font-size:50px;
+                color: black;
+                display:grid;
+                height: 30px;
+              }
+              
+              #ul li a:hover:not(.header) {
+                background-color: #eee;
+              }
+        </style>
+    
+    </head>
+    
+    <body>
+        <form name = "form" method="POST">
+            {% csrf_token %}
+            <p id = 'user_id' hidden >{{user_id}}</p>
+            <p id="group_mem" name = "group_mem" hidden></p>
+            <div class="container-fluid h-80">
+                <div class="row justify-content-center h-80">
+                    <div class="col-md-4 col-xl-4 chat">
+               
+      <h4><b>List Group With Badges</b></h4>
+                       <button type="button" class="btn btn-dark" style="margin-left: 300px;"onclick="createGroup()">Create</button> 
+                         <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+      <input style="margin-right: 900px;"class="form-control form-control-sm mr-2 w-50" type="text" placeholder="Search"
+        aria-label="Search" type="text" id="myInput" name="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                        <br>
+        <ul id="ul"  class="list-group">
+        
+            <li class="list-group-item list-group-item-sm mr-0 w-45 ">Newyadbfas </li>
+            <li class="list-group-item list-group-item-sm mr-0 w-45 ">Newasdfhalsdhf </li>
+            <li class="list-group-item list-group-item-sm mr-0 w-45 ">Newadf,amjsdlf </li>
+            <li class="list-group-item list-group-item-sm mr-0 w-45 ">Newasdfasd </li>
+            <li class="list-group-item list-group-item-sm mr-0 w-45 ">Newsadf </li>
+            <li class="list-group-item list-group-item-sm mr-0 w-45 ">Newasdfasd </li>
+            <li class="list-group-item list-group-item-sm mr-0 w-45 ">Newsdf </li>
+            <li class="list-group-item list-group-item-sm mr-0 w-45 ">Newsdaf </li>
+            <li class="list-group-item list-group-item-sm mr-0 w-45 ">Newasdf </li>
+      </ul>
+        <br/>
+        <ul id="addedList" style="margin-left: 414px;margin-top:-430px;" name="grp_mem">
+        
+                        </ul>
+                </div>
+                </div>
+    </form>
+    </body>
+    <script type="text/javascript">
+        function addToGrpList(ele) {
+            var task, list_ele, list, x_butt,name;   
+            list = document.getElementById("addedList");
+            list_ele = document.createElement('li');
+            list_ele.className="addList";
+            var name = document.createElement('span');
+            name.className = 'name';
+            name.innerHTML=ele.querySelector('.name').innerHTML;
+            var ide = document.createElement('span');
+            ide.innerHTML=ele.querySelector('.id').innerHTML;
+            ide.className="id";
+            ide.style.visibility="hidden";
+            list_ele.appendChild(ide);
+            list_ele.appendChild(name);
+            list.appendChild(list_ele);
+        }
+        function myFunction() {
+            word = document.getElementById("myInput");
+            var url =  '/getUsers?word='+word.value+'&user_id='+document.getElementById("user_id").innerHTML;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var root = document.getElementsByClassName('list-group');
+                    $(root).empty();
+                    var data = JSON.parse(xhttp.responseText);
+                    for(var i=0;i<data.length;i++){
+                        var list = document.createElement("LI");
+                        list.className = 'list-group-item';
+                        var name = document.createElement('span');
+                        var name_text = document.createTextNode(data[i][1]);
+                        name.className = 'name';
+                        var email = document.createElement("span");
+                        email.className = 'badge';
+                        var email_text = document.createTextNode(data[i][2]);
+                        var ide = document.createElement('span');
+                        ide.style.visibility="hidden";
+                        ide.innerHTML = data[i][0];
+                        ide.className="id";
+                        name.appendChild(name_text);
+                        list.appendChild(name);
+                        email.appendChild(email_text);
+                        list.appendChild(ide);
+                        list.appendChild(email);
+                        list.setAttribute("value",data[i][0]);
+                        list.setAttribute("onclick","addToGrpList(this)");
+                        document.getElementById("ul").appendChild(list);
+                    }
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+        function createGroup(){
+            var group_name="";
+            while(group_name=="")
+                group_name=prompt("Enter the group name","");
+            if(group_name!=null){
+                document.getElementById("myInput").value= group_name;
+                var grp_mem_list=document.getElementsByClassName("addList");
+                var grp_mem_text=document.getElementById("group_mem");
+                for(var i=0;i<grp_mem_list.length;i++){
+                    grp_mem_text.append(grp_mem_list[i].querySelector('.id').innerHTML+'_');
+                }
+                document.forms['form'].action = '/addGroupToDb?group_mem='+grp_mem_text.innerHTML+'&user_id='+document.getElementById('user_id').innerHTML;
+                document.forms['form'].submit();
             }
         }
-    }
-    function createGroup(){
-        var group_name="";
-        while(group_name=="")
-            group_name=prompt("Enter the group name","");
-        document.getElementById("myInput").value= group_name;
-        var grp_mem_list=document.getElementsByClassName("addList");
-        var grp_mem_text=document.getElementById("group_mem");
-        for(var i=0;i<grp_mem_list.length;i++){
-            grp_mem_text.value=grp_mem_text.value+grp_mem_list[i].innerHTML+'_';
-        }
-        document.forms['form'].action = '/addGroupToDb';
-        document.forms['form'].submit();
-    }
-</script>
-</html>
+    </script>
+    </html>

@@ -1,454 +1,760 @@
 {% load static %}
 
-{% static "media/pics" as baseUrl %}
+
+<!------ Include the above in your HEAD tag ---------->
+
+<!DOCTYPE html>
 <html>
-
-<head>
-    <title>Home :: Split-Wiser</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link href="homeboot.css" rel="stylesheet" id="bootstrap-css">
-    <script src="boot.js"></script>
-    <script src="jquer.js"></script>
-
-    <link href="test.css" type="text/css" rel="stylesheet" />
-    <style type="text/css">
-        .container {
-            max-width: 1170px;
-            margin: auto;
-        }
-
-        img {
-            max-width: 100%;
-        }
-
-        .inbox_people {
-            background: #EDE0A1 none repeat scroll 0 0;
-            float: left;
-            width: 40%;
-            border-right: 1px solid #c4c4c4;
-            overflow-y: scroll;
-        }
-
-        .inbox_msg {
-            border: 1px solid #81E643;
-            clear: both;
-            overflow: hidden;
-        }
-
-        .top_spac {
-            margin: 20px 0 0;
-        }
+	<head>
+		<title>Chat</title>
+		
 
 
-        .recent_heading {
-            float: left;
-            width: 40%;
-        }
-
-        .srch_bar {
-            display: inline-block;
-            text-align: right;
-            width: 60%;
-            padding:
-        }
-
-        .headind_srch {
-            width:600px;
-            overflow: hidden;
-            border-bottom: 1px solid #c4c4;
-        }
-
-        .recent_heading h4 {
-            color: #000207;
-            font-size: 21px;
-            margin: auto;
-        }
-
-        .srch_bar input {
-            border: 1px solid #000207;
-            border-width: 0 0 1px 0;
-            width: 80%;
-            padding: 2px 0 4px 6px;
-            background: none;
-        }
-
-        .srch_bar .input-group-addon button {
-            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-            border: medium none;
-            padding: 0;
-            font-size: 18px;
-        }
-
-        .srch_bar .input-group-addon {
-            margin: 0 0 0 -27px;
-        }
-
-        .chat_ib h5 {
-            font-size: 15px;
-            color: #000207;
-            margin: 0 0 8px 0;
-        }
-
-        .chat_ib h5 span {
-            font-size: 13px;
-            float: right;
-        }
-
-        .chat_ib p {
-            font-size: 14px;
-            color: #000207;
-            margin: auto
-        }
-
-        .chat_img {
-            float: left;
-            width: 10%;
-        }
-
-        .chat_ib {
-            float: left;
-            padding: 0 0 0 15px;
-            width: 88%;
-        }
-
-        .chat_people {
-            overflow: hidden;
-            clear: both;
-        }
-
-        .chat_list {
-            border-bottom: 1px solid #454B4B;
-            margin: 0;
-            padding: 18px 16px 10px;
-        }
-
-        .inbox_chat {
-            height: 550px;
-        }
-
-        .active_chat {
-            background: #E5E5C0;
-        }
-
-        .incoming_msg_img {
-            display: inline-block;
-            width: 6%;
-        }
-
-        .received_msg {
-            display: inline-block;
-            padding: 0 0 0 10px;
-            vertical-align: top;
-            width: 92%;
-        }
-
-        .received_withd_msg p {
-            background: #DBEE95 none repeat scroll 0 0;
-            border-radius: 3px;
-            color: #030303;
-            font-size: 14px;
-            margin: 0;
-            padding: 5px 10px 5px 12px;
-            width: 100%;
-        }
-
-        .time_date {
-            color: #030303;
-            display: block;
-            font-size: 12px;
-            margin: 8px 0 0;
-        }
-
-        .received_withd_msg {
-            width: 57%;
-        }
-
-        .mesgs {
-            float: left;
-            padding: px 15px 0 25px;
-            width: 50%;
-        }
-
-        .sent_msg p {
-            background: #05728f none repeat scroll 0 0;
-            border-radius: 3px;
-            font-size: 14px;
-            margin: 0;
-            color: #fff;
-            padding: 5px 10px 5px 12px;
-            width: 100%;
-        }
-
-        .outgoing_msg {
-            overflow: hidden;
-            margin: 26px 0 26px;
-        }
-
-        .sent_msg {
-            float: right;
-            width: 56%;
-        }
-
-        .input_msg_write input {
-            background: #ECE9B8 none repeat scroll 0 0;
-            border: medium none;
-            color: #080807;
-            font-size: 15px;
-            min-height: 48px;
-            width: 100%;
-        }
-
-        .type_msg {
-            border-top: 1px solid #c4c4c4;
-            position: relative;
-        }
-
-        .msg_send_btn {
-            background: #13CD1E none repeat scroll 0 0;
-            border: medium none;
-            border-radius: 50%;
-            color: #fff;
-            cursor: pointer;
-            font-size: 17px;
-            height: 33px;
-            position: absolute;
-            right: 0;
-            top: 11px;
-            width: 33px;
-        }
-
-        .messaging {
-            padding: 0 0 50px 10px;
-        }
-
-        .msg_history {
-            height: 516px;
-            overflow-y: auto;
-        }
-        .inbox_msg{
-            background-image:url(/static/background.jpeg);
-        }
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js">
+            	$(document).ready(function(){
+$('#action_menu_btn').click(function(){
+	$('.action_menu').toggle();
+});
+	});
         
-        .inbox_msg{
-            background-image:url(/static/background.jpeg);
-        }
-        
-        button i:hover{
-            cursor: pointer;
-        }
-        i:hover{
-            background-color: gray;
-            cursor: pointer;
-        }
-        .chat_list:hover{
-            background-color: tomato;
-        }
-          input:hover {
-            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-          }
-        #individual_red{
-            margin-left: 100;
-            margin-top: 100;
-            color: red;
-        }
-        #individual_green{
-            margin-left: 100;
-            margin-top: 100;
-            color: green;
-        }
-        #red{
-            margin-left: 100;
-            color: red;
-        }
-        #green{
-            margin-left: 100;
-            color: green;
-        }
-        #givings{
-            width: 110px;
-            margin-left: 10px;
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 120px;
-            cursor: pointer;
-            -webkit-transition-duration: 0.4s; /* Safari */
-            transition-duration: 0.1s;
-        }
-        #clear{
-            width: 60px;
-            margin-left: 10px;
-            background-color: rgb(236, 9, 9); /* Green */
-            border: none;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 10px;
-            cursor: pointer;
-            -webkit-transition-duration: 5.0s; /* Safari */
-            transition-duration: 0.1s;
-        }
-    </style>
-    <script>
-        function loadChat(temp_this) {
-            var a = document.getElementsByName("temp_text");
-            a[0].value = temp_this.querySelector('b').innerHTML;
-            document.forms['form'].action = '/loadChat/'+a[0].value;
-            document.forms['form'].submit();
-        }
+        </script>
+       <style>
+        	body,html{
+			height: auto;
+			margin: 0px;
+               	background: black;
+	       background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+	        background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+		}
 
-        function add_user() {
-            window.location.href = "/getUsersForAddingUser";
-        }
+		.chat{
+            
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+		.card{
 
-        function add_group() {
-            window.location.href = "/getUsersForAddingGroup";
-        }
+			height: 960px;
+			border-radius: 15px !important;
+			background-color:lightgray;
+		
+		
+		}
+	
 
-        function sendMsge() {
-            if(document.getElementById("msg").value == ""){
-                alert("message is mandatory!!!");
-            }
-            else{
-                var a = document.getElementsByName("temp_text");
-                a[0].value = document.getElementById("friend_name").innerHTML;
-                document.forms['form'].action = '/saveMsgToDb';
-                document.forms['form'].submit();
-            }
-        }
-        function clearChat(){
-            window.location.href="/clearChat/"+document.getElementById("friend_name").innerHTML;
-        }
+		.contacts_body{
+			padding:  0.75rem 0 !important;
+			overflow-y: auto;
+            overflow-x: auto;
+			white-space: nowrap;
+            height: 500px;
+            min-width: inherit;
+		}
+		.msg_card_body{
+			overflow-y: auto;
+		}
+		.card-header{
+			border-radius: 15px 15px 0 0 !important;
+			border-bottom: 0 !important;
+		}
+	 .card-footer{
+		border-radius: 0 0 15px 15px !important;
+			border-top: 0 !important;
+         top:40%;
+         
+	}
+		.container{
+			align-content: center;
+		}
+		.search{
+			border-radius: 10px 0 0 10px !important;
+			background-color: grey!important;
+			border:0 !important;
+			color:black !important;
+		}
+		.search:focus{
+		     box-shadow:none !important;
+           outline:0px !important;
+		}
+		.type_msg{
+			background-color: gry !important;
+			border:0 !important;
+			color:black!important;
+			height: 60px !important;
+			overflow-y: auto;
+		}
+			.type_msg:focus{
+		     box-shadow:none !important;
+           outline:0px !important;
+		}
+		.attach_btn{
+	border-radius: 15px 0 0 15px !important;
+	background-color:black !important;
+			border:0 !important;
+			color: white !important;
+			cursor: pointer;
+		}
+		.send_btn{
+	border-radius: 0 15px 15px 0 !important;
+	background-color: black!important;
+			border:0 !important;
+			color: grey !important;
+			cursor: pointer;
+		}
+		.search_btn{
+			border-radius: 0 15px 15px 0 !important;
+			background-color: grey !important;
+			border:0 !important;
+			color: black!important;
+			cursor: pointer;
+		}
+		.contacts{
+			list-style: none;
+			padding: 0;
+		}
+		.contacts li{
+			width: 100% !important;
+			padding: 5px 10px;
+			margin-bottom: 15px !important;
+		}
+		.user_img{
+			height: 50px;
+			width: 50px;
+			border:1.5px solid grey;
+		
+		}
+		.user_img_msg{
+			height: 20px;
+			width: 20px;
+			border:1.5px solid black;
+		
+		}
+	.img_cont{
+			position: relative;
+			height: 70px;
+			width: 70px;
+	}
+	.img_cont_msg{
+			height: 50px;
+			width: 50px;
+         font-family: sans-serif;
+	}
 
-        function groupGivings(){
-            window.location.href = "/groupGivings/"+document.getElementById("friend_name").innerHTML;
-        }
-    </script>
+	.user_info{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-left: 15px;
+	}
+	.user_info span{
+		font-size: 20px;
+		color: black;
+        font-family: sans-serif;
+	}
+	.user_info p{
+	font-size: 10px;
+	color: black;
+         font-family: sans-serif;
+	}
+	.video_cam{
+		margin-left: 50px;
+		margin-top: 5px;
+	}
+	.video_cam span{
+		color: black;
+		font-size: 20px;
+		cursor: pointer;
+		margin-right: 20px;
+	}
+	.msg_cotainer{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-left: 10px;
+		border-radius: 25px;
+		background-color: whitesmoke;
+		padding: 10px;
+        height:auto;
+		position: relative;
+	}
+	.msg_cotainer_send{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-right: 10px;
+		border-radius: 25px;
+		background-color: grey;
+		padding: 10px;
+        height: auto;
+		position: relative;
+	}
+	.msg_time{
+		position: absolute;
+		left: 0;
+		bottom: -15px;
+		color:black ;
+		font-size: 10px;
+	}
+	.msg_time_send{
+		position: absolute;
+		right:0;
+		bottom: -15px;
+		color: black;
+		font-size: 10px;
+	}
+	.msg_head{
+		position: relative;
+	}
+	#action_menu_btn{
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		color: black;
+		cursor: pointer;
+		font-size: 20px;
+	}
+	.action_menu{
+		z-index: 1;
+		position: absolute;
+		padding: 15px 0;
+		background-color: rgba(0,0,0,0.5);
+		color: white;
+		border-radius: 15px;
+		top: 30px;
+		right: 15px;
+		display: none;
+	}
+	.action_menu ul{
+		list-style: none;
+		padding: 0;
+	margin: 0;
+	}
+	.action_menu ul li{
+		width: 100%;
+		padding: 10px 15px;
+		margin-bottom: 5px;
+	}
+	.action_menu ul li i{
+		padding-right: 10px;
+	
+	}
+	.action_menu ul li:hover{
+		cursor: pointer;
+		background-color: rgba(0,0,0,0.2);
+	}
+	@media(max-width: 1000px){
+	.contacts_card{
+		margin-bottom: 15px !important;
+	}
+         #sidebatch{
+             position: relative;
+    width: 30px; 
+    }
+	.card{
+		bottom:2rem;
+	}
 
-</head>
-
-<body>
-    <form name="form" method="POST">
-        {% csrf_token %}
-        <input name="temp_text" type="text" hidden>
-    <div class="container">
-        <div class="messaging">
-            <div class="inbox_msg">
-                <div class="inbox_people" style="width: 280px;overflow-y:auto;height:650px;">
-
-                    <div class="inbox_chat">
-                        <div class="headind_srch">
-                            <div class="recent_heading">
-                                <p style="font-weight: bold;">&emsp;Current User - {{user}} </p>
-                                <p>
-                                    {% if give is not None %}
-                                    <b id="red">TOTAL = - {{give}}</b> 
-                                    {% elif receive is not None %}
-                                    <b id="green">TOTAL = + {{receive}}</b>
-                                    {% endif %}
-                                </p>
-                                &emsp;
-                                <i id="addGroup" class="add" onclick="add_group()"><b>New Group</b></i>
-                                &emsp;
-                                <b>or</b>
-                                &emsp;
-                                <i id="add" class="add" onclick="add_user()"><b>Add Friend</b></i>
-                            </div>
-                        </div>
-                        
-                    <div class="headind_srch">
-                        <div class="recent_heading">
-                            <h5 style="text-align: center;">YOUR FRIENDS</h5>
-                        </div>
-                    </div>
-                    {% for friend in friends%}
-                        <div class="chat_list" style="cursor: pointer;"  onclick="loadChat(this)">
-                            <div class="chat_people">
-                                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="dp"> </div>
-                                <div class="chat_ib">
-                                    <b id="hi">{{friend}}</b>
-                                </div>
-                            </div>
-                        </div>
-                    {%endfor%}
-                        <div class="headind_srch">
-                            <div class="recent_heading">
-                                <h5 style="text-align: center;">YOUR GROUPS</h5>
-                            </div>
-                        </div>
-                    {% for group in groups%}
-                        <div class="chat_list" style="cursor: pointer;" onclick="loadChat(this)">
-                            <div class="chat_people">
-                                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="dp"> </div>
-                                <div class="chat_ib">
-                                    <b id="hi">{{group}}</b>
-                                </div>
-                            </div>
-                        </div>
-                    {%endfor%}
-                    </div>
-                </div>
-                {% if chat is not None%}
-                <div class="mesgs" style="margin-left:3px;width: 874px">
-                    
-                    <div style="background-color:seashell;height:35px;">
-                        &nbsp;
-                        <div class="chat_img" style="width: 35px;padding-top:3px;padding-left:3px;"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                        <b><span id="friend_name" style="font-size: 20px;">{{friend}}</span></b>
-                        {% if give_to_friend is not None %}    
-                        <b id="individual_red">AMOUNT =  - {{give_to_friend}}</b>
-                        {% elif receive_from_friend is not None %}
-                        <b id="individual_green">AMOUNT =  + {{receive_from_friend}}</b>
-                        {%endif%}
-                        {%if group is not None%}
-                        <input type="button" onclick="groupGivings()" value="group givings" name="givings" id="givings">
-                        {%endif%}
-                        <input type="button" onclick="clearChat()" value="clear" name="clear" id="clear">
-                    </div>
-                    <div class="msg_history">
-                        {%for msg in messages%}
-                        {%if msg.0 != user%}
-                        <div class="incoming_msg">
-                            <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                            <div class="received_msg">
-                                <div class="received_withd_msg">
-                                    <p><b>From {{msg.0}} :</b>  {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}}</p>
-                                </div>
-                            </div>
-                        </div>
-                        {% else %}
-                        <div class="outgoing_msg">
-                            <div class="sent_msg">
-                                <p><b>Me :</b>  {% if msg.2 != 0 %} {{msg.2}}/-{%endif%}  {{msg.3}} </p>
-                            </div>
-                        </div>
-                        {%endif%}
-                        {%endfor%}
-                    </div>
-                        
-                    <div class="type_msg">
-                        <div class="input_msg_write">
-                            <input id="amnt" name="amnt" type="number" class="form-control wa-input" placeholder="Enter the amount - Default is 0">
-                        <input id="msg" name="msg" class="form-control wa-input" placeholder="Type a message"/>
-                            <button class="msg_send_btn" type="button"> <i id="send" name="send" class="material-icons" onclick="sendMsge()">send</i></button>
-                        </div>
-                    </div>
-                </div>
-                {%endif%}
+	}</style>
+	</head>
+	<body>
+	<p hidden id = "user_id">{{user_id}}</p>
+		<div class="container mt-5">
+		<div class="row h-100 justify-content-center align-items-center">
+			<div class="row-md-8">
+			   <div class="card" style="width: 50rem ;height : 80%;" >
+					<div class="card-header  msg_head">
+						<div class="input-group">
+							 <p style="font-weight: bold;">&emsp;Current User - {{user}}&emsp; </p>
+							<input type="text" placeholder="Search..." name="" class="form-control search">
+							<div class="input-group-prepend">
+								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+			                 <button class="button" onclick="add_group()"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Create Group</span></button>
+			                 <button class="button" onclick="add_user()"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add Friend </span></button>
+							</div>
+						</div>
+					</div>
+					<div class="card-body contacts_body">
+						<ul class="contacts">
+							<h6 style="text-align: center;">YOUR FRIENDS</h6>
+							{% for friend in friends%}
+							<li onclick="loadChat(this)">
+								<div class="d-flex bd-highlight">
+									<div class="img_cont">
+										<img src="download.png" class="rounded-circle user_img">
+										<span class="online_icon"></span>
+									</div>
+									<div class="user_info">
+										<span>{{friend.1}}</span>
+										<span hidden class = "friend">{{friend.0}}</span>
+									</div>
+								</div>
+							</li>
+							{%endfor%}
+							<h6 style="text-align: center;">YOUR GROUPS</h6>
+							{% for group in groups%}
+							<li onclick="loadChat(this)">
+								<div class="d-flex bd-highlight">
+									<div class="img_cont">
+										<img src="download.png" class="rounded-circle user_img">
+										<span class="online_icon offline"></span>
+									</div>
+									<div class="user_info">
+										<span>{{group.1}}</span>
+										<span hidden class = "group">{{group.0}}</span>
+									</div>
+								</div>
+							</li>
+						{%endfor%}
+						</ul>
+					</div>
+				</div></div>
+		
+				</div>
+			</div>
             </div>
-
-
-
-
         </div>
-    </div>
-    </form>
-</body>
 
+
+	</body>
+	<script>
+		function add_user() {
+			window.location.href = "/getAddUserTemplate?user_id="+document.getElementById("user_id").innerHTML;
+		}
+	
+		function add_group() {
+			window.location.href = "/getAddGrpTemplate?user_id="+document.getElementById("user_id").innerHTML;
+		}
+		function loadChat(temp_this) {
+			if(temp_this.querySelector('.user_info .friend')==null){
+				window.location.href = '/loadChat?user_id='+document.getElementById("user_id").innerHTML+"&friend_id="+temp_this.querySelector('.user_info .group').innerHTML+"&friend_name="+temp_this.querySelector('.user_info span').innerHTML+'&group=1';
+			}
+			else{
+				window.location.href = '/loadChat?user_id='+document.getElementById("user_id").innerHTML+"&friend_id="+temp_this.querySelector('.user_info .friend').innerHTML+"&friend_name="+temp_this.querySelector('.user_info span').innerHTML+'&group=0';
+			}
+        }
+	</script>
 </html>
+-->
+<!--
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js">
+            	$(document).ready(function(){
+				$('#action_menu_btn').click(function(){
+					$('.action_menu').toggle();
+				});
+					});
+        
+        </script>
+        <style>
+        	body,html{
+			height: auto;
+			margin: 0px;
+               	background: black;
+	       background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+	        background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+		}
+
+		.chat{
+            
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+		.card{
+			height: 1880px;
+			border-radius: 15px !important;
+			background-color:lightgray;
+		}
+		.contacts_body{
+			padding:  0.75rem 0 !important;
+			overflow-y: auto;
+            overflow-x: auto;
+			white-space: nowrap;
+            height: 1080%;
+            min-width: inherit;
+		}
+		.msg_card_body{
+			overflow-y: auto;
+		}
+		.card-header{
+			border-radius: 15px 15px 0 0 !important;
+			border-bottom: 0 !important;
+		}
+	 .card-footer{
+		border-radius: 0 0 15px 15px !important;
+			border-top: 0 !important;
+	}
+		.container{
+			align-content: center;
+		}
+		.search{
+			border-radius: 10px 0 0 10px !important;
+			background-color: grey!important;
+			border:0 !important;
+			color:black !important;
+		}
+		.search:focus{
+		     box-shadow:none !important;
+           outline:0px !important;
+		}
+		.type_msg{
+			background-color: black !important;
+			border:0 !important;
+			color:black!important;
+			height: 60px !important;
+			overflow-y: auto;
+		}
+			.type_msg:focus{
+		     box-shadow:none !important;
+           outline:0px !important;
+		}
+		.attach_btn{
+	border-radius: 15px 0 0 15px !important;
+	background-color:black !important;
+			border:0 !important;
+			color: white !important;
+			cursor: pointer;
+		}
+		.send_btn{
+	border-radius: 0 15px 15px 0 !important;
+	background-color: black !important;
+			border:0 !important;
+			color: black !important;
+			cursor: pointer;
+		}
+		.search_btn{
+			border-radius: 0 15px 15px 0 !important;
+			background-color: grey !important;
+			border:0 !important;
+			color: black!important;
+			cursor: pointer;
+		}
+		.contacts{
+			list-style: none;
+			padding: 0;
+		}
+		.contacts li{
+			width: 100% !important;
+			padding: 5px 10px;
+			margin-bottom: 15px !important;
+		}
+		.user_img{
+			height: 50px;
+			width: 50px;
+			border:1.5px solid grey;
+		
+		}
+		.user_img_msg{
+			height: 20px;
+			width: 20px;
+			border:1.5px solid black;
+		
+		}
+	.img_cont{
+			position: relative;
+			height: 70px;
+			width: 70px;
+	}
+	.img_cont_msg{
+			height: 50px;
+			width: 50px;
+         font-family: sans-serif;
+	}
+
+	.user_info{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-left: 15px;
+	}
+	.user_info span{
+		font-size: 20px;
+		color: black;
+        font-family: sans-serif;
+	}
+	.user_info p{
+	font-size: 10px;
+	color: black;
+         font-family: sans-serif;
+	}
+	.video_cam{
+		margin-left: 50px;
+		margin-top: 5px;
+	}
+	.video_cam span{
+		color: white;
+		font-size: 20px;
+		cursor: pointer;
+		margin-right: 20px;
+	}
+	.msg_cotainer{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-left: 10px;
+		border-radius: 25px;
+		background-color: whitesmoke;
+		padding: 10px;
+		position: relative;
+	}
+	.msg_cotainer_send{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-right: 10px;
+		border-radius: 25px;
+		background-color: black;
+		padding: 10px;
+		position: relative;
+	}
+	.msg_time{
+		position: absolute;
+		left: 0;
+		bottom: -15px;
+		color:black ;
+		font-size: 10px;
+	}
+	.msg_time_send{
+		position: absolute;
+		right:0;
+		bottom: -15px;
+		color: grey;
+		font-size: 10px;
+	}
+	.msg_head{
+		position: relative;
+	}
+	#action_menu_btn{
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		color: white;
+		cursor: pointer;
+		font-size: 20px;
+	}
+	.action_menu{
+		z-index: 1;
+		position: absolute;
+		padding: 15px 0;
+		background-color: rgba(0,0,0,0.5);
+		color: white;
+		border-radius: 15px;
+		top: 30px;
+		right: 15px;
+		display: none;
+	}
+	.action_menu ul{
+		list-style: none;
+		padding: 0;
+	margin: 0;
+	}
+	.action_menu ul li{
+		width: 100%;
+		padding: 10px 15px;
+		margin-bottom: 5px;
+	}
+	.action_menu ul li i{
+		padding-right: 10px;
+	
+	}
+	.action_menu ul li:hover{
+		cursor: pointer;
+		background-color: rgba(0,0,0,0.2);
+	}
+	@media(max-width: 1000px){
+	.contacts_card{
+		margin-bottom: 15px !important;
+	}
+         #sidebatch{
+             position: relative;
+    width: 30px; 
+    }
+    }</style>
+    
+	</head>
+	<body>
+		
+            <p hidden id = "user_id">{{user_id}}</p>
+            <div class="container mt-5">
+                <div class="row h-100 justify-content-center align-items-center">
+                    <div class="row-md-8">
+                        <div class="card" style="width: 50rem ;height : 80%;" >
+                                <div class="card-header msg_head">
+						<div class="input-group">
+                            <p style="font-weight: bold;">&emsp;Current User - {{user}}&emsp; </p>
+							<input type="text" placeholder="Search..." name="" class="form-control search">
+							<div class="input-group-prepend">
+								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+			                 <button class="button" onclick="add_group()"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Create Group</span></button>
+			                 <button class="button" onclick="add_user()"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add Friend </span></button>
+							</div>
+						</div>
+					</div>
+					<div class="card-body contacts_body">
+						<ul class="contacts">
+                            <h6 style="text-align: center;">YOUR FRIENDS</h5>
+                                {% for friend in friends%}
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>{{friend}}</span>	
+								</div>
+                            </div>
+                            <hr>
+						</li>
+						//////////////////////////////
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>love</span>	
+								</div>
+                            </div>
+                            <hr>
+						</li>
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>love</span>	
+								</div>
+                            </div>
+                            <hr>
+						</li>
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>love</span>	
+								</div>
+                            </div>
+                            <hr>
+						</li>
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>love</span>	
+								</div>
+                            </div>
+                            <hr>
+						</li>
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>love</span>	
+								</div>
+                            </div>
+                            <hr>
+						</li>
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>love</span>	
+								</div>
+                            </div>
+                            <hr>
+						</li>
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>love</span>	
+								</div>
+                            </div>
+                            <hr>
+						</li>
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>love</span>	
+								</div>
+                            </div>
+                            <hr>
+						</li>
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://treasuresofinnocence.org/wp-content/uploads/2016/11/icon-user-default.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>love</span>	
+								</div>
+                            </div>
+                            <hr>
+                        </li>
+						///////////////////////////
+                        {%endfor%}
+                        </ul>
+                        <ul class="contacts">
+                            <h6 style="text-align: center;">YOUR GROUPS</h5>
+                                {% for group in groups%}
+                            <li class="active">
+                                <div class="d-flex bd-highlight">
+                                    <div class="img_cont">
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcResY5Y-LIXlgHnQDKTBzgj58-OIwHZT6Hryw&usqp=CAU" class="rounded-circle user_img">
+                                        <span class="online_icon"></span>
+                                    </div>
+                                    <div class="user_info">
+                                        <span>{{group}</span>	
+                                    </div>
+                                </div>
+                                <hr>
+                            </li>
+                            {%endfor%}
+                            </ul>
+					</div>
+				</div></div>
+		</div>
+				</div>
+			</div>
+
+
+	</body>
+</html>
+
+-->

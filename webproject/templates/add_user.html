@@ -1,9 +1,87 @@
 {% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add user</title>
+
+ 
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    function addUser(ele) {
+        window.location.href = '/addUserToDb?friend_id='+ele.getAttribute('value')+'&user_id='+document.getElementById("user_id").innerHTML;
+    }
+    function myFunction() {
+        word = document.getElementById("input");
+        //user_id = document.getElementById("user_id");
+        var url =  '/getUsers?word='+word.value+'&user_id='+document.getElementById("user_id").innerHTML;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var root = document.getElementsByClassName('list-group');
+                $(root).empty();
+                var data = JSON.parse(xhttp.responseText);
+                for(var i=0;i<data.length;i++){
+                    var list = document.createElement("LI");
+                    list.className = 'list-group-item';
+                    var name_text = document.createTextNode(data[i][1]);
+                    var email = document.createElement("span");
+                    email.className = 'badge';
+                    var email_text = document.createTextNode(data[i][2]);
+                    list.appendChild(name_text);
+                    email.appendChild(email_text);
+                    list.appendChild(email);
+                    list.setAttribute("value",data[i][0]);
+                    list.setAttribute("onclick","addUser(this)");
+                    document.getElementById("users_list").appendChild(list);
+                }
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+</script>
+</head>
+<body>
+<form name = "form" method="POST">
+    {% csrf_token %}
+    <p id = 'user_id' hidden >{{user_id}}</p>
+    <p id = 'friend_id' hidden></p>
+<div class="container">
+  <h2>List Group With Badges</h2>
+  <br>
+  <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
+    aria-label="Search" onkeyup="myFunction()" id = "input">
+  <i class="fas fa-search" aria-hidden="true"></i>
+  <ul class="list-group" id = "users_list">
+  </ul>
+</div>
+</form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
 <!DOCTYPE HTML>
 <html>
 
 <head>
-    <title>Add User :: Split-Wiser</title>
+    <title>Add user</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -85,3 +163,8 @@
 </body>
 
 </html>
+-->
+
+
+
+

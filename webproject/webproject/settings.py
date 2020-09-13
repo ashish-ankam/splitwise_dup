@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+#import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -49,12 +50,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 ROOT_URLCONF = 'webproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR,'templates'),os.path.join(BASE_DIR,'static')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,11 +79,9 @@ DATABASES = {
         'NAME': 'webProject',
         'USER' : 'postgres',
         'PASSWORD': '1234',
-        'HOST':'localhost'
+        'host': 'localhost'
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -121,9 +119,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS=[
-    os.path.join(BASE_DIR,'static')
+STATICFILES_DIR = [
+    os.path.join(BASE_DIR,'static'),
 ]
 STATIC_ROOT=os.path.join(BASE_DIR,'assets')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+#django_heroku.settings(locals())
